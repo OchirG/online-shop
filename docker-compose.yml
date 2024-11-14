@@ -4,7 +4,7 @@ services:
     ports:
       - 85:80
     volumes:
-      - '/home/ochir/projects/environment/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf'
+      - '/home/ochir/projects/online-shop/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf'
       - '.:/var/www/html'
   php-fpm:
     build: ../online-shop/docker/php
@@ -16,3 +16,5 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - 54344:5432
