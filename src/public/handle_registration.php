@@ -4,7 +4,7 @@ function validateRegistrationForm(array $methodPost)
 {
     $errors = [];
 
-    // Валидация имени
+
     if (isset($methodPost['name'])) {
         $name = trim($methodPost['name']);
         if (empty($name)) {
@@ -14,7 +14,7 @@ function validateRegistrationForm(array $methodPost)
         }
     }
 
-    // Валидация email
+
     if (isset($methodPost['email'])) {
         $email = trim($methodPost['email']);
         if (empty($email)) {
@@ -24,7 +24,7 @@ function validateRegistrationForm(array $methodPost)
         }
     }
 
-    // Валидация пароля
+
     if (isset($methodPost['psw'])) {
         $password = $methodPost['psw'];
         if (empty($password)) {
@@ -34,7 +34,7 @@ function validateRegistrationForm(array $methodPost)
         }
     }
 
-    // Валидация повторного пароля
+
     if (isset($methodPost['psw-repeat'])) {
         $passwordRepeat = $methodPost['psw-repeat'];
         if (empty($passwordRepeat)) {
@@ -47,26 +47,27 @@ function validateRegistrationForm(array $methodPost)
     return $errors;
 }
 
-// Получаем ошибки валидации
+
 $errors = validateRegistrationForm($_POST);
 
-// Если ошибок нет, продолжаем регистрацию
+
 if (empty($errors)) {
-    // Получаем значения из формы
+
     $name = trim($_POST['name']);
     $email = trim($_POST['email']);
     $password = $_POST['psw'];
     $passwordRepeat = $_POST['psw-repeat'];
 
-    // Соединение с базой данных
+
     $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
     $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
 
-    // Хешируем пароль
+
     $hash = password_hash($password, PASSWORD_DEFAULT);
     $stmt->execute(['name' => $name, 'email' => $email, 'password' => $hash]);
 
-    // Получаем информацию о зарегистрированном пользователе
+    header('Location: /login');
+
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
     $stmt->execute(['email' => $email]);
     ($stmt->fetch());

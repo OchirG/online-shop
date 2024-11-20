@@ -4,7 +4,7 @@ function validateLogin(array $methodPost)
 {
     $errors = [];
 
-    // Проверка email
+
     if(isset($methodPost['email'])){
         $email = trim($methodPost['email']);
         if(empty($email)){
@@ -14,7 +14,7 @@ function validateLogin(array $methodPost)
         }
     }
 
-    // Проверка пароля
+
     if(isset($methodPost['password'])){
         $password = trim($methodPost['password']);
         if(empty($password)){
@@ -27,7 +27,7 @@ function validateLogin(array $methodPost)
     return $errors;
 }
 
-// Получаем ошибки валидации
+
 $errors = validateLogin($_POST);
 
 if (empty($errors)) {
@@ -38,23 +38,26 @@ if (empty($errors)) {
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
 
     $stmt->execute(['email' => $email]);
-    $user = $stmt->fetch();
+    $data = $stmt->fetch();
 
-    // Проверяем, существует ли пользователь
-    if ($user === false) {
-        $errors['email'] = 'Неправильный адрес электронной почты';
+
+    if ($data === false) {
+        $errors['email'] = 'логин или пароль указаны неверно';
         require_once './get_login.php';
     } else {
-        // Проверяем пароль
-        if (password_verify($password, $user['password'])) {
-            echo "Успешный вход";
-            // Здесь можно добавить редирект или другую логику после успешного входа
+
+        if (password_verify($password, $data['password'])) {
+            //setcookie('user_id', $data['id']);
+            session_start();
+            $_SESSION['user_id'] = $data['id'];
+            header('Location: /catalog');
+
         } else {
-            $errors['password'] = 'Неверный пароль';
+            $errors['email'] = 'логин или пароль указаны неверно';
             require_once './get_login.php';
         }
     }
 } else {
-    // Если есть ошибки, отображаем страницу входа
+
     require_once './get_login.php';
 }

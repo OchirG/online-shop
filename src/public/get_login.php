@@ -3,7 +3,7 @@
 <!--form area start-->
 <div class="form">
     <!--login form start-->
-    <form class="login-form" action="handle_login.php" method="POST">
+    <form class="login-form" action="/login" method="POST">
         <i class="fas fa-user-circle"></i>
         <input class="user-input" type="text" name="email" placeholder="E-mail" required>
         <label style="color:red">
@@ -26,7 +26,7 @@
     </form>
     <!--login form end-->
     <!--signup form start-->
-    <form class="signup-form" action="handle_registration.php" method="POST">
+    <form class="signup-form" action="" method="POST">
         <i class="fas fa-user-plus"></i>
         <input class="user-input" type="text" name="name" placeholder="Username" required>
         <input class="user-input" type="email" name="email" placeholder="Email Address" required>
