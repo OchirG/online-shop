@@ -1,63 +1,76 @@
 <?php
+class UserLogin {
+    private $pdo;
+    private $errors = [];
 
-function validateLogin(array $methodPost)
-{
-    $errors = [];
+    public function __construct($pdo) {
+        $this->pdo = $pdo;
+    }
+    public function validateLogin(array $data) {
+        if (isset($data['email'])) {
+            $email = trim($data['email']);
+            if (empty($email)) {
+                $this->errors['email'] = 'Требуется адрес электронной почты';
+            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $this->errors['email'] = 'Неверный адрес электронной почты';
+            }
+        }
 
+        if (isset($data['password'])) {
+            $password = trim($data['password']);
+            if (empty($password)) {
+                $this->errors['password'] = 'Требуется пароль';
+            } elseif (strlen($password) < 6) {
+                $this->errors['password'] = 'Пароль должен содержать не менее 6 символов';
+            }
+        }
 
-    if(isset($methodPost['email'])){
-        $email = trim($methodPost['email']);
-        if(empty($email)){
-            $errors['email'] = 'Требуется адрес электронной почты';
-        } elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-            $errors['email'] = 'Неверный адрес электронной почты';
+        return $this->errors;
+    }
+
+    public function loginUser(array $data) {
+        $email = trim($data['email']);
+        $password = trim($data['password']);
+
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        $user = $stmt->fetch();
+
+        if ($user === false) {
+            $this->errors['email'] = 'Логин или пароль указаны неверно';
+            return false;
+        }
+
+        if (password_verify($password, $user['password'])) {
+            // Установка сессии
+            session_start();
+            $_SESSION['user_id'] = $user['id'];
+            return true;
+        } else {
+            $this->errors['email'] = 'Логин или пароль указаны неверно';
+            return false;
         }
     }
 
-
-    if(isset($methodPost['password'])){
-        $password = trim($methodPost['password']);
-        if(empty($password)){
-            $errors['password'] = 'Требуется пароль';
-        } elseif(strlen($password) < 6){
-            $errors['password'] = 'Пароль должен содержать не менее 6 символов';
-        }
+    public function getErrors(): array {
+        return $this->errors;
     }
-
-    return $errors;
 }
 
+$pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
 
-$errors = validateLogin($_POST);
+$userLogin = new UserLogin($pdo);
+
+$errors = $userLogin->validateLogin($_POST);
 
 if (empty($errors)) {
-    $email = trim($_POST['email']);
-    $password = trim($_POST['password']);
-
-    $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-
-    $stmt->execute(['email' => $email]);
-    $data = $stmt->fetch();
-
-
-    if ($data === false) {
-        $errors['email'] = 'логин или пароль указаны неверно';
-        require_once './get_login.php';
+    if ($userLogin->loginUser($_POST)) {
+        header('Location: /catalog');
+        exit;
     } else {
-
-        if (password_verify($password, $data['password'])) {
-            //setcookie('user_id', $data['id']);
-            session_start();
-            $_SESSION['user_id'] = $data['id'];
-            header('Location: /catalog');
-
-        } else {
-            $errors['email'] = 'логин или пароль указаны неверно';
-            require_once './get_login.php';
-        }
+        $errors = $userLogin->getErrors();
+        require_once './get_login.php';
     }
 } else {
-
     require_once './get_login.php';
 }

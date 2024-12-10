@@ -1,42 +1,27 @@
-<form action="registration" method="POST">
-    <head>
-        <meta charset="UTF-8">
-        <title>Регистрация</title>
-    </head>
+<form action="/registration" method=POST>
     <div class="container">
         <h1>Register</h1>
         <p>Please fill in this form to create an account.</p>
         <hr>
 
         <label for="name"><b>Name</b></label>
-        <label style="color:red">
-            <?php if(isset($errors["name"])){
-                print_r($errors['name']);} ?>
-        </label>
-        <input type="text" placeholder="Enter name" name="name" id="name" required>
+        <label style="color: red;">
+            <?php echo $errors['name']??"";?></label>
+        <input type="text" placeholder="Enter Name" name="name" id="name" required>
 
         <label for="email"><b>Email</b></label>
-        <label style="color:red">
-            <?php if(isset($errors["email"])) {
-                print_r($errors["email"]);
-            }                               ?>
-        </label>
+        <label style="color: red;">
+            <?php echo $errors['email']??"";?></label>
         <input type="text" placeholder="Enter Email" name="email" id="email" required>
 
         <label for="psw"><b>Password</b></label>
-        <label style="color:red">
-            <?php if(isset($errors["psw"])){
-                print_r($errors["psw"]);
-            } ?>
-        </label>
+        <label style="color: red;">
+            <?php echo $errors['password']??"";?></label>
         <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
         <label for="psw-repeat"><b>Repeat Password</b></label>
-        <label style="color:red">
-            <?php if(isset($errors["psw-repeat"])){
-                print_r($errors["psw-repeat"]);
-            } ?>
-        </label>
+        <label style="color: red;">
+            <?php echo $errors['password-repeat']??"";?></label>
         <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
         <hr>
 
@@ -49,9 +34,14 @@
     </div>
 </form>
 
+
 <style>
     * {box-sizing: border-box}
 
+    /* Bordered form */
+    form {
+        border: 3px solid #f1f1f1;
+    }
 
     /* Add padding to containers */
     .container {
@@ -106,4 +96,3 @@
         text-align: center;
     }
 </style>
-

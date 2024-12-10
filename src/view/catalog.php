@@ -1,25 +1,3 @@
-<?php
-
-session_start();
-if(!isset($_SESSION['user_id'])){
-    header('Location: /login');
-if (!isset ($_SESSION['product_id'])) {
-    header('Location: /add-product');
-}
-}
-
-
-$products = [];
-$pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
-$stmt = $pdo->query("SELECT * FROM products");
-$stmt->execute();
-$products = $stmt->fetchAll();
-
-if (empty($products)) {
-    echo "Нет товаров в каталоге";
-}
-?>
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -35,19 +13,23 @@ if (empty($products)) {
 </header>
 <main>
     <div class="catalog">
-        <?php foreach ($products as $product): ?>
-            <div class="card">
-                <img src="<?php echo $product['image']; ?>" >
-                <h2><?php echo $product['productname']; ?></h2>
-                <h2><?php echo $product['description']; ?></h2>
-                <p>Цена: <?php echo $product['price']; ?> рублей.</p>
-                <form method="POST" action="/add-product">
-                    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                    <input type="number" name="amount" value="" min="1">
-                    <button type="submit">Купить</button>
-                </form>
-            </div>
-        <?php endforeach; ?>
+        <?php if (!empty($products)): ?>
+            <?php foreach ($products as $product): ?>
+                <div class="card">
+                    <img src="<?php echo $product['image']; ?>" alt="<?php echo htmlspecialchars($product['productname']); ?>">
+                    <h2><?php echo htmlspecialchars($product['productname']); ?></h2>
+                    <h2><?php echo htmlspecialchars($product['description']); ?></h2>
+                    <p>Цена: <?php echo htmlspecialchars($product['price']); ?> рублей.</p>
+                    <form method="POST" action="/add-product">
+                        <input type="hidden" name="product_id" value="<?php $product['id']; ?>">
+                        <input type="number" name="amount" value="" min="1">
+                        <button type="submit">Купить</button>
+                    </form>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Нет доступных товаров для отображения.</p>
+        <?php endif; ?>
     </div>
 </main>
 </body>
@@ -120,3 +102,4 @@ if (empty($products)) {
         background-color: #ffd700;
     }
 </style>
+
