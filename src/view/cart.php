@@ -20,9 +20,14 @@
     </ul>
     <h2>Итого: <?php echo $product['amount']*$product['price'] ?> рублей</h2>
 <?php endif; ?>
+<form method="POST" action="/remove-product">
+    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+    <button type="submit">Удалить из корзины</button>
+</form>
 <a href="/catalog">Продолжить покупки</a>
 <a href="/logout">Выйти</a>
 <a href="/order">Оформить заказ</a>
+
 </body>
 </html>
 

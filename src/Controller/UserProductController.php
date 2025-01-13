@@ -1,4 +1,7 @@
 <?php
+namespace Controller;
+use Model\UserProduct;
+use Model\Product;
 class UserProductController
 {
     private UserProduct $userProductModel;
@@ -13,7 +16,7 @@ class UserProductController
     public function getAddProductForm(): void
     {
         $this->checkSession();
-        require_once './../view/add_product.php';
+        require_once './../view/catalog.php';
     }
 
     public function handleAddUserProductForm(): void
@@ -22,7 +25,7 @@ class UserProductController
         $errors = $this->validateAddProductForm($_POST);
 
         if (!empty($errors)) {
-            require_once './../view/add_product.php';
+            require_once './../view/catalog.php';
             return;
         }
         if (!isset($_SESSION['user_id'])) {
@@ -37,10 +40,10 @@ class UserProductController
             header('Location: /cart');
             exit();
         } else {
-            $errors['general'] = 'Ошибка при добавлении продукта.';
+            $errors = 'Ошибка при добавлении продукта.';
         }
 
-        require_once './../view/add_product.php';
+        require_once './../view/catalog.php';
     }
 
     private function checkSession(): void

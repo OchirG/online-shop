@@ -18,11 +18,11 @@
                 <div class="card">
                     <img src="<?php echo $product['image']; ?>" alt="<?php echo htmlspecialchars($product['productname']); ?>">
                     <h2><?php echo htmlspecialchars($product['productname']); ?></h2>
-                    <h2><?php echo htmlspecialchars($product['description']); ?></h2>
+                    <h3><?php echo htmlspecialchars($product['description']); ?></h3>
                     <p>Цена: <?php echo htmlspecialchars($product['price']); ?> рублей.</p>
                     <form method="POST" action="/add-product">
-                        <input type="hidden" name="product_id" value="<?php $product['id']; ?>">
-                        <input type="number" name="amount" value="" min="1">
+                        <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                        <input type="number" name="amount" value="1" min="1">
                         <button type="submit">Купить</button>
                     </form>
                 </div>

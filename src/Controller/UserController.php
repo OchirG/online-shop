@@ -1,4 +1,6 @@
 <?php
+namespace Controller;
+use Model\User;
 class UserController
 {
     private User $userModel;
@@ -21,16 +23,17 @@ class UserController
             $email = trim($_POST['email']);
             $password = trim($_POST['psw']);
 
-            if ($this->userModel->getOneByEmail($email) !== false) {
+            $user = $this->userModel->getOneByEmail($email);
+
+            if ($user) {
                 $errors['email'] = "Пользователь с таким адресом электронной почты уже существует";
             } else {
                 $hashPassword = password_hash($password, PASSWORD_DEFAULT);
-                $newUser = $this->userModel->create($name, $email, $hashPassword);
-                if ($newUser === false) {
-                    $errors['name'] = "Ошибка при передаче данных";
-                } else {
+                if ($this->userModel->create($name, $email, $hashPassword)) {
                     header("Location: /login");
                     exit;
+                } else {
+                    $errors['name'] = "Ошибка при создании пользователя";
                 }
             }
         }
@@ -46,17 +49,18 @@ class UserController
     public function handleLoginForm(): void
     {
         session_start();
-
         $errors = $this->validateLoginForm($_POST);
+
         if (empty($errors)) {
             $email = trim($_POST['email']);
             $password = trim($_POST['password']);
 
+            // Получаем пользователя по email
             $user = $this->userModel->getOneByEmail($email);
-            if ($user === false || !password_verify($password, $user['password'])) {
+            if ($user === null || !password_verify($password, $user->getPassword())) {
                 $errors['email'] = 'Логин или пароль указаны неверно';
             } else {
-                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_id'] = $user->getId();
                 header("Location: /catalog");
                 exit;
             }
@@ -64,6 +68,7 @@ class UserController
 
         require_once './../view/login.php';
     }
+
 
     private function validateRegistrationForm(array $data): array
     {

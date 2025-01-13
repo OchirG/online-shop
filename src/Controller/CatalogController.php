@@ -1,5 +1,6 @@
 <?php
-
+namespace Controller;
+use Model\Product;
 class CatalogController
 {
     private Product $productModel;

@@ -1,36 +1,9 @@
 <?php
+namespace Core;
+
 class App {
 
-    private array $routes = [
-        '/registration' => [
-            'GET' => ['class' => 'UserController', 'method' => 'getRegistrationForm'],
-            'POST' => ['class' => 'UserController', 'method' => 'handleRegistrationForm']
-        ],
-        '/login' => [
-            'GET' => ['class' => 'UserController', 'method' => 'getLoginForm'],
-            'POST' => ['class' => 'UserController', 'method' => 'handleLoginForm']
-        ],
-        '/catalog' => [
-            'GET' => ['class' => 'CatalogController', 'method' => 'getCatalogPage']
-        ],
-        '/add-product' => [
-            'GET' => ['class' => 'UserProductController', 'method' => 'getAddProductForm'],
-            'POST' => ['class' => 'UserProductController', 'method' => 'handleAddUserProductForm']
-        ],
-        '/cart' => [
-            'GET' => ['class' => 'CartController', 'method' => 'getCartPage']
-        ],
-        '/logout' => [
-            'GET' => ['class' => 'UserController', 'method' => 'logout']
-        ],
-        '/order' => [
-            'GET' => ['class' => 'OrderController', 'method' => 'getOrderForm'],
-            'POST' => ['class' => 'OrderController', 'method' => 'handleOrder']
-        ],
-        '/order/confirm' => [
-            'GET' => ['class' => 'OrderController', 'method' => 'getOrderConfirmForm']
-        ]
-    ];
+    private array $routes = [];
 
     public function run(): void {
         $uri = $_SERVER['REQUEST_URI'];
@@ -40,89 +13,59 @@ class App {
             $route = $this->routes[$uri][$method];
             $controllerClass = $route['class'];
             $controllerMethod = $route['method'];
+
             $controller = new $controllerClass();
             $controller->$controllerMethod();
         } else {
-            require_once './../view/404.php'; // Отображение страницы 404
+            require_once './../view/404.php';
         }
     }
+
+    public function addRoute(string $uriName, string $uriMethod, string $className, string $method): void {
+        if(!isset($this->routes[$uriName][$uriMethod])) {
+            $this->routes[$uriName][$uriMethod]['class'] = $className;
+            $this->routes[$uriName][$uriMethod]['method'] = $method;
+        }else{
+            echo "$uriMethod зарегистрирован для $uriName";
+        }
+
+
+    }
 }
-
-
-//class App {
-//    public function run(): void
-//    {
-//        $uri = $_SERVER['REQUEST_URI'];
-//        $method = $_SERVER['REQUEST_METHOD'];
+//    private array $routes = [
+//        '/registration' => [
+//            'GET' => ['class' => 'Controller\UserController', 'method' => 'getRegistrationForm'],
+//            'POST' => ['class' => 'Controller\UserController', 'method' => 'handleRegistrationForm']
+//        ],
+//        '/login' => [
+//            'GET' => ['class' => 'Controller\UserController', 'method' => 'getLoginForm'],
+//            'POST' => ['class' => 'Controller\UserController', 'method' => 'handleLoginForm']
+//        ],
+//        '/catalog' => [
+//            'GET' => ['class' => 'Controller\CatalogController', 'method' => 'getCatalogPage']
+//        ],
+//        '/add-product' => [
+//            'GET' => ['class' => 'Controller\UserProductController', 'method' => 'getAddProductForm'],
+//            'POST' => ['class' => 'Controller\UserProductController', 'method' => 'handleAddUserProductForm']
+//        ],
+//        '/cart' => [
+//            'GET' => ['class' => 'Controller\CartController', 'method' => 'getCartPage']
+//        ],
+//        '/logout' => [
+//            'GET' => ['class' => 'Controller\UserController', 'method' => 'logout']
+//        ],
+//        '/remove-product'=> [
+//            'GET' => ['class' => 'Controller\CartController', 'method' => 'removeProductFromCart']
+//        ],
+//        '/order' => [
+//            'GET' => ['class' => 'Controller\OrderController', 'method' => 'getOrderForm'],
+//            'POST' => ['class' => 'Controller\OrderController', 'method' => 'handleOrder']
+//        ],
+//        '/order/confirm' => [
+//            'GET' => ['class' => 'Controller\OrderController', 'method' => 'getOrderConfirmForm']
+//        ],
+//        '/orders'=>[
+//            'GET' => ['class' => 'Controller\OrderController', 'method' => 'getOrders'],
+//        ]
 //
-//        switch ($uri) {
-//            case '/registration':
-//                $registration = new UserController();
-//                if ($method === 'GET') {
-//                    $registration->getRegistrationForm();
-//                } elseif ($method === 'POST') {
-//                    $registration->handleRegistrationForm();
-//                } else {
-//                    echo "$method не поддерживается адресом $uri";
-//                }
-//                break;
-//            case '/login':
-//                $login = new UserController();
-//                if ($method === 'GET') {
-//                    $login->getLoginForm();
-//                } elseif ($method === 'POST') {
-//                    $login->handleLoginForm();
-//                } else {
-//                    echo "$method не поддерживается адресом $uri";
-//                }
-//                break;
-//            case '/catalog':
-//                $catalog = new CatalogController();
-//                if ($method === 'GET') {
-//                    $catalog->getCatalogPage();
-//                } else {
-//                    echo "$method не поддерживается адресом $uri";
-//                }
-//                break;
-//            case '/add-product':
-//                $userProduct = new UserProductController();
-//                if ($method === 'GET') {
-//                    $userProduct->getAddProductForm();
-//                } elseif ($method === 'POST') {
-//                    $userProduct->handleAddUserProductForm();
-//                } else {
-//                    echo "$method не поддерживается адресом $uri";
-//                }
-//                break;
-//            case '/cart':
-//                $cart = new CartController();
-//                if ($method === 'GET') {
-//                    $cart->getCartPage();
-//                } else {
-//                    echo "$method не поддерживается адресом $uri";
-//                }
-//                break;
-//            case '/logout':
-//                $logout = new UserController();
-//                if ($method === 'GET') {
-//                    $logout->logout();
-//                } else {
-//                    echo "$method не поддерживается адресом $uri";
-//                }
-//                break;
-//            case '/order':
-//                $order = new OrderController();
-//                if ($method === 'GET') {
-//                    $order->getOrderForm();
-//                }elseif ($method === 'POST') {
-//                    $order->processOrder();
-//                }else{
-//                    echo "$method не поддерживается адресом $uri";
-//                }
-//                break;
-//            default:
-//                require_once './../view/404.php';
-//                break;
-//        }
-//    }
-//}
+//    ];

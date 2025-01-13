@@ -1,171 +1,256 @@
-<!-- start of nav -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">OUI OUI</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<div class="funds-success-message-container">
+    <div class="funds-checkmark-text-container">
+        <div class="funds-checkmark-container">
+            <svg class="funds-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="funds-checkmark-circle" cx="26" cy="26" r="25" fill="none"/><path class="funds-checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#">HOME</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">SHOP</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link" href="#">
-                    ABOUT US
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">LOGIN</a>
-            </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item login-logout-btn">
-                <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i>{QUANTITY}</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-<!-- end of nav-->
-
-
-
-
-<!-- start of main -->
-<div style="background:">
-    <div class="container">
-
-        <div class="row">
-            <div class="col-12 ">
-                <div class="message-box">
-                    <div class="success-container">
-
-                        <br>
-                        <img src="https://scontent-lcy1-1.xx.fbcdn.net/v/t1.6435-9/31301640_2114242505489348_3921532491046846464_n.png?_nc_cat=104&ccb=1-3&_nc_sid=973b4a&_nc_ohc=pfOalMq8BzUAX-k-rhY&_nc_ht=scontent-lcy1-1.xx&oh=3af014dd12fa6e3d1816a3425a80e516&oe=609BE04A" alt="" style="height: 100px;">
-                        <br>
-                        <div style="padding-left: 5%; padding-right: 5%">
-                            <hr
-                        </div>
-                        <br>
-                        <h1 class="monserrat-font" style="color: Grey">Thank you for your order</h1>
-                        <br>
-
-                        <div class="confirm-green-box">
-                            <br>
-                            <h5>ORDER CONFIRMATION</h5>
-                            <p>Your order #2465 has been sucessful!</p>
-                            <p>Thank you for choosing Oui Oui fashion. You will shortly receive a confirmation email.</p>
-                        </div>
-
-                        <br>
-                        <a href="/catalog">Продолжить покупки</a>
-                    </div>
-                </div>
+            <div class="funds-display-on-ie">
+                <svg class="funds-ie-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="funds-ie-checkmark-circle" cx="26" cy="26" r="25" fill="none"/><path class="funds-ie-checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
             </div>
         </div>
 
+        <h1 class="funds-success-done-text">Заказ успешно создан!</h1>
     </div>
+
+    <div class="funds-success-message">
+
+
+
+        <a href="/catalog">Продолжить покупки</a>
+
+        <a href="/orders">Мои заказы</a>
+    </div>
+
 </div>
-<!-- end of main -->
 
 <style>
-    /* Write page CSS here*/
-    .message-box{
-        display: flex;
-        justify-content: center;
-        padding-top: 20vh;
-        padding-bottom: 20vh;
+    .funds-success-message-container {
+        font-family: Roboto, "Segoe UI", "Helvetica Neue", sans-serif !important;
+        color: #333;
+        margin-top: 100px;
+        max-width: 500px;
+        margin: 0 auto;
     }
-    .success-container{
-        background: white;
-        height: 480px;
-        width: 90%;
-        box-shadow: 5px 5px 10px grey;
+
+    a {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    a:hover {
+        background-color: #0056b3;
+    }
+    .funds-checkmark-text-container {
+        display: block;
+        width: auto !important;
+        max-width: 500px;
+        margin: 0 auto;
         text-align: center;
     }
-    .confirm-green-box{
-        width: 100%;
-        height: 140px;
-        background: #d7f5da;
+
+    .funds-checkmark-container {
+        height: 40px;
+        padding: 0 4px 0 0px;
+        display: inline-block;
+        width: 70px;
+        margin: 0 auto;
     }
 
-
-    .monserrat-font{
-        font-family: 'Montserrat', sans-serif;
-        letter-spacing: 2px;
+    .funds-checkmark-container:after {
+        clear: both;
     }
 
-
-
-
-
-    /* --------------- site wide START ----------------- */
-    .main{
-        width:80vw;
-        margin: 0 10vw;
-        height:50vh;
-        overflow:hidden;
-
+    .funds-success-done-text {
+        vertical-align: middle;
+        margin: 0;
+        padding: 15px 0 0 0;
+        display: inline;
     }
 
-    body{
-        font-family: 'Montserrat', sans-serif;
+    .funds-success-message {
+        text-align: center;
+        margin-top: 2em;
     }
 
-    /*
-     * Setting the site variables, example of how to use
-     * color:var(--text-1);
-     *
-     */
-
-    :root {
-        --background-1: #ffffff;
-        --background-2: #E3E3E3;
-        --background-3: #A3CCC8;
-        --text-1: #000000;
-        --text-2: #ffffff;
-        --text-size-reg: calc(20px + (20 - 18) * ((100vw - 300px) / (1600 - 300)));
-        --text-size-sml: calc(10px + (10 - 8) * ((100vw - 300px) / (1600 - 300)));
+    .funds-success-message h2 {
+        margin-top: 0px;
     }
 
-    .verticle-align{
-        text-align:center;
-        display:flex;
-        align-items:center;
-        justify-content:center;
+    h1,
+    h2 {
+        font-weight: 700;
+        margin-top: 0px;
     }
 
-    .no-style{
-        padding:0;
-        margin:0;
+    h1 {
+        font-size: 28pt;
+        margin-top: 45px;
     }
 
-
-    /* ------------------ site wide END ----------------- */
-
-    /* ----- RESPONSIVE OPTIONS MUST STAY AT BOTTOM ----- */
-
-    /* SM size and above unless over ridden in bigger sizes */
-    @media (min-width: 576px) { /* sm size */
-
+    h2 {
+        font-size: 18pt;
+        margin-top: 25px;
     }
 
-    /* MD size and above unless over ridden in bigger sizes */
-    @media (min-width: 768px) {
-
+    p {
+        font-size: 12pt;
+        padding-bottom: 1em;
+        line-height: 27.2px;
     }
 
-    /* LG size and above unless over ridden in bigger sizes */
-    @media (min-width: 992px) {
-
-
+    /* CHECKMARK */
+    .funds-checkmark-circle {
+        stroke-dasharray: 166;
+        stroke-dashoffset: 166;
+        stroke-width: 5;
+        stroke-miterlimit: 10;
+        stroke: #33bb11;
+        fill: none;
+        -webkit-animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
     }
 
-    /* XL size and above */
-    @media (min-width: 1200px) {
-
+    .funds-checkmark {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        display: block;
+        stroke-width: 5;
+        stroke: #ffffff;
+        stroke-miterlimit: 10;
+        margin: 10% auto;
+        -webkit-box-shadow: inset 0px 0px 0px #33bb11;
+        box-shadow: inset 0px 0px 0px #33bb11;
+        -webkit-animation: fill 0.4s ease-in-out 0.4s forwards,
+        scale 0.3s ease-in-out 0.9s both;
+        animation: fill 0.4s ease-in-out 0.4s forwards,
+        scale 0.3s ease-in-out 0.9s both;
     }
+
+    .funds-checkmark-check {
+        -webkit-transform-origin: 50% 50%;
+        -ms-transform-origin: 50% 50%;
+        transform-origin: 50% 50%;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+        -webkit-animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+    }
+
+    .funds-display-on-ie {
+        display: none;
+    }
+
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        .funds-display-on-ie {
+            display: block;
+        }
+
+        .funds-checkmark {
+            display: none;
+        }
+
+        .funds-ie-checkmark-circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 5;
+            stroke-miterlimit: 10;
+            stroke: #33bb11;
+            fill: none;
+            -webkit-animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .funds-ie-checkmark {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 5;
+            stroke: #ffffff;
+            stroke-miterlimit: 10;
+            margin: 10% auto;
+            -webkit-box-shadow: inset 0px 0px 0px #33bb11;
+            box-shadow: inset 0px 0px 0px #33bb11;
+            -webkit-animation: fill 0.4s ease-in-out 0.4s forwards,
+            scale 0.3s ease-in-out 0.9s both;
+            animation: fill 0.4s ease-in-out 0.4s forwards,
+            scale 0.3s ease-in-out 0.9s both;
+        }
+
+        .funds-ie-checkmark-check {
+            -webkit-transform-origin: 50% 50%;
+            -ms-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+            -webkit-animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+    }
+
+    @-webkit-keyframes stroke {
+        100% {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @keyframes stroke {
+        100% {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @-webkit-keyframes scale {
+        0%,
+        100% {
+            -webkit-transform: none;
+            transform: none;
+        }
+        50% {
+            -webkit-transform: scale3d(1.1, 1.1, 1);
+            transform: scale3d(1.1, 1.1, 1);
+        }
+    }
+
+    @keyframes scale {
+        0%,
+        100% {
+            -webkit-transform: none;
+            transform: none;
+        }
+        50% {
+            -webkit-transform: scale3d(1.1, 1.1, 1);
+            transform: scale3d(1.1, 1.1, 1);
+        }
+    }
+
+    @-webkit-keyframes fill {
+        100% {
+            -webkit-box-shadow: inset 0px 0px 0px 30px #33bb11;
+            box-shadow: inset 0px 0px 0px 30px #33bb11;
+        }
+    }
+
+    @keyframes fill {
+        100% {
+            -webkit-box-shadow: inset 0px 0px 0px 30px #33bb11;
+            box-shadow: inset 0px 0px 0px 30px #33bb11;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        .funds-checkmark-text-container {
+            display: block;
+        }
+        .funds-checkmark-container {
+            height: auto;
+            padding: 0;
+            display: block;
+            width: 100%;
+        }
+    }
+
 </style>

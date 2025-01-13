@@ -1,5 +1,8 @@
 <?php
-
+namespace Controller;
+use Model\User;
+use Model\Product;
+use Model\UserProduct;
 class CartController
 {
     private UserProduct $userProductModel;
@@ -30,7 +33,7 @@ class CartController
             $products = [];
         } else {
             // Извлекаем идентификаторы продуктов
-            $productIds = array_column($userProducts, 'product_id');
+            $productIds = array_column($userProducts,  $userProducts[0]->getProductId());
 
             // Получаем все продукты по идентификаторам
             $productsDB = $this->productModel->getAllById($productIds);
@@ -48,12 +51,24 @@ class CartController
                 }
             }
 
-            // Переходим к массиву
             $products = array_values($productMap);
         }
 
+
         require_once './../view/cart.php';
     }
+
+    public function removeProductFromCart(): void
+    {
+        $this->checkSession();
+
+        $userId = $_SESSION['user_id'];
+
+        $this->userProductModel->clearCartByUserId($userId);
+
+            header('Location: /cart');
+            exit();
+        }
 
     private function checkSession(): void
     {

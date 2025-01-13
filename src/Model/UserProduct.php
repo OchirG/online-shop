@@ -1,7 +1,23 @@
 <?php
-
-class UserProduct extends GetConnection
+namespace Model;
+use PDO;
+class UserProduct extends Model
 {
+    private int $id;
+    private int $user_id;
+    private int $product_id;
+    private int $amount;
+
+    public function __construct(int $id, int $userId, int $productId, int $amount){
+        parent::__construct();
+
+        $this->id = $id;
+        $this->user_id = $userId;
+        $this->product_id = $productId;
+        $this->amount = $amount;
+    }
+
+
 
     // Метод для вставки или обновления записи о продукте для пользователя
     public function getAddProduct($userId, $productId, $amount): bool
@@ -16,11 +32,47 @@ class UserProduct extends GetConnection
     }
 
     // метод для получения всех продуктов для конкретного пользователя, с сортировкой по идентификатору продукта.
-    public function getAllByUserId(int $userId): array|false
+    public function getAllByUserId(int $userId): ?array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :user_id ORDER BY product_id");
         $stmt->execute(['user_id' => $userId]);
-        return $stmt->fetchAll();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($data)) {
+            return null;
+        }
+        $products = [];
+        foreach ($data as $item) {
+            $product = new UserProduct(
+                $item['id'],
+                $item['product_id'],
+                $item['amount'],
+                $item['user_id']
+            );
+
+            $products[] = $product;
+        }
+        return $products;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
+
+    public function getProductId(): int
+    {
+        return $this->product_id;
+    }
+
+    public function getAmount(): int
+    {
+        return $this->amount;
     }
 
     public function clearCartByUserId(int $userId): bool
