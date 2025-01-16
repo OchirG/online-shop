@@ -4,20 +4,9 @@ use PDO;
 class UserProduct extends Model
 {
     private int $id;
-    private int $user_id;
-    private int $product_id;
+    private int $userId;
+    private int $productId;
     private int $amount;
-
-    public function __construct(int $id, int $userId, int $productId, int $amount){
-        parent::__construct();
-
-        $this->id = $id;
-        $this->user_id = $userId;
-        $this->product_id = $productId;
-        $this->amount = $amount;
-    }
-
-
 
     // Метод для вставки или обновления записи о продукте для пользователя
     public function getAddProduct($userId, $productId, $amount): bool
@@ -36,22 +25,26 @@ class UserProduct extends Model
     {
         $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :user_id ORDER BY product_id");
         $stmt->execute(['user_id' => $userId]);
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $productsData = $stmt->fetchAll();
 
-        if (empty($data)) {
+
+        if (empty($productsData)) {
             return null;
         }
+
         $products = [];
-        foreach ($data as $item) {
-            $product = new UserProduct(
-                $item['id'],
-                $item['product_id'],
-                $item['amount'],
-                $item['user_id']
-            );
+        foreach ($productsData as $data) {
+
+            $product = new self();
+
+            $product->id = $data['id'];
+            $product->userId = $data['user_id'];
+            $product->productId = $data['product_id'];
+            $product->amount = $data['amount'];
 
             $products[] = $product;
         }
+
         return $products;
     }
 
@@ -62,13 +55,14 @@ class UserProduct extends Model
 
     public function getUserId(): int
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     public function getProductId(): int
     {
-        return $this->product_id;
+        return $this->productId;
     }
+
 
     public function getAmount(): int
     {

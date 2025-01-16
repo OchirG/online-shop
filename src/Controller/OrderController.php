@@ -45,13 +45,13 @@ class OrderController {
                 $productId = $userProduct->getProductId();
                 $amount = $userProduct->getAmount();
 
-                $productPrice = $this->product->getProductPriceById($productId);
-                if ($productPrice === null) {
+                $product = $this->product->getProductById($productId);
+                if ($product === null) {
+                    echo "Не удалось получить информацию о продукте с ID: $productId.";
 
-                    echo "Не удалось получить цену для продукта с ID: $productId.";
-//                    continue;
                 }
-                $total = $productPrice * $amount;
+
+                $total = $product->getPrice() * $amount;
 
                 $this->orderProduct->createOrderDetail($orderId, $productId, $amount, $total);
             }
@@ -64,46 +64,47 @@ class OrderController {
             echo "Не удалось создать заказ. Пожалуйста, попробуйте позже.";
         }
     }
-
     public function getOrders()
     {
         $this->checkSession();
         $userId = $_SESSION['user_id'];
         $orders = $this->order->getAllByUserId($userId);
 
-        foreach ($orders as &$order) {
-            $orderProducts = $this->orderProduct->getByOrderId($order['id']);
-            if (empty($orderProducts)) {
-                echo 'Не найдено ни одного товара для заказа с идентификатором:' . $order['id'];
-
-
+        if (empty($orders)) {
+            echo 'У вас нет заказов.';
+            return;
         }
 
-        foreach ($orderProducts as $orderProduct) {
-                $productIds[] = $orderProduct['product_id'];
+        foreach ($orders as &$order) {
+            $orderProducts = $this->orderProduct->getByOrderId($order->getId());
+
+            if (empty($orderProducts)) {
+                echo 'Не найдено ни одного товара для заказа с идентификатором: ' . $order->getId();
+                continue;
+            }
+
+            $productIds = [];
+            foreach ($orderProducts as $orderProduct) {
+                $productIds[] = $orderProduct->getProductId();
             }
 
             if (!empty($productIds)) {
                 $products = $this->product->getAllById($productIds);
-
-                foreach ($products as &$product) {
+                foreach ($products as $product) {
                     foreach ($orderProducts as $orderProduct) {
-                        if ($product['id'] === $orderProduct['product_id']) {
-                            $product['order_amount'] = $orderProduct['amount'];
-                            $product['order_price'] = $orderProduct['total'];
+                        if ($product->getId() === $orderProduct->getProductId()) {
+                            $product->order_amount = $orderProduct->getAmount();
+                            $product->order_price = $orderProduct->getTotal();
                         }
                     }
-                    unset($product);
                 }
-                $order['products'] = $products;
-
+                $order->products = $products;
             }
         }
 
-        unset($order);
-
         require_once './../view/orders.php';
     }
+
 
     private function checkSession(): void {
         session_start();

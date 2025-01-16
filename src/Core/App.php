@@ -15,7 +15,9 @@ class App {
             $controllerMethod = $route['method'];
 
             $controller = new $controllerClass();
-            $controller->$controllerMethod();
+            $request = new Request($uri, $method, $_POST);
+
+            $controller->$controllerMethod($request);
         } else {
             require_once './../view/404.php';
         }

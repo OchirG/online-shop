@@ -7,22 +7,10 @@ class Order extends Model
     private string $name;
     private string $email;
     private string $address;
-    private int $number;
-
-    public function __construct(int $id, int $userId, string $name, string $email, string $address, int $number){
-
-        parent::__construct();
-
-        $this->id = $id;
-        $this->userId = $userId;
-        $this->name = $name;
-        $this->email = $email;
-        $this->address = $address;
-        $this->number = $number;
+    private string $number;
 
 
-    }
-    public function createOrder(int $userId, string $name, string $email, string $address, string $number): bool
+    public function createOrder(int $userId, string $name, string $email, string $address, string $number): int
     {
 
         $stmt = $this->pdo->prepare("
@@ -51,14 +39,14 @@ class Order extends Model
 
         $orders = [];
         foreach ($ordersData as $orderData) {
-            $orders[] = new self(
-                $orderData['id'],
-                $orderData['user_id'],
-                $orderData['name'],
-                $orderData['email'],
-                $orderData['address'],
-                $orderData['number']
-            );
+            $order = new self();
+                $order->id =$orderData['id'];
+                $order->userId = $orderData['user_id'];
+                $order->name = $orderData['name'];
+                $order->email = $orderData['email'];
+                $order->address = $orderData['address'];
+                $order->number = $orderData['number'];
+                $orders[] = $order;
         }
 
         return $orders;
@@ -89,7 +77,7 @@ class Order extends Model
         return $this->address;
     }
 
-    public function getNumber(): int
+    public function getNumber(): string
     {
         return $this->number;
     }

@@ -29,7 +29,7 @@ class UserProductController
             return;
         }
         if (!isset($_SESSION['user_id'])) {
-            header("Location: /view/login.php");
+            header("Location: /login");
             exit();
         }
         $userId = $_SESSION['user_id'];

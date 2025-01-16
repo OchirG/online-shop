@@ -33,42 +33,51 @@ class CartController
             $products = [];
         } else {
             // Извлекаем идентификаторы продуктов
-            $productIds = array_column($userProducts,  $userProducts[0]->getProductId());
+            $productIds = [];
+            foreach ($userProducts as $userProduct) {
+                $productIds[] = $userProduct->getProductId(); // предполагается, что метод getProductId() возвращает product_id
+            }
 
             // Получаем все продукты по идентификаторам
             $productsDB = $this->productModel->getAllById($productIds);
 
-
             $productMap = [];
             foreach ($productsDB as $product) {
-                $productMap[$product['id']] = $product;
+                $productMap[$product->getId()] = $product;
             }
 
             // Добавляем количество товаров в массив
+            $productQuantities = [];
+
+// Проходим по товарам пользователя
             foreach ($userProducts as $userProduct) {
-                if (isset($productMap[$userProduct['product_id']])) {
-                    $productMap[$userProduct['product_id']]['amount'] = $userProduct['amount'];
+                $productId = $userProduct->getProductId();
+                $amount = $userProduct->getAmount();
+
+                // Проверяем, существует ли продукт в схеме productMap
+                if (isset($productMap[$productId])) {
+                    // Добавляем объект продукта и его количество в итоговый массив
+                    $productMap[$productId]->quantity = $amount;  // добавляем количество как свойство
+                    $products[] = $productMap[$productId];
                 }
             }
 
-            $products = array_values($productMap);
         }
 
 
         require_once './../view/cart.php';
     }
-
-    public function removeProductFromCart(): void
-    {
-        $this->checkSession();
-
-        $userId = $_SESSION['user_id'];
-
-        $this->userProductModel->clearCartByUserId($userId);
-
-            header('Location: /cart');
-            exit();
-        }
+//    public function removeProductFromCart(): void
+//    {
+//        $this->checkSession();
+//
+//        $userId = $_SESSION['user_id'];
+//
+//        $this->userProductModel->clearCartByUserId($userId);
+//
+//            header('Location: /cart');
+//            exit();
+//        }
 
     private function checkSession(): void
     {

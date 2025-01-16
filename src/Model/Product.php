@@ -10,15 +10,6 @@ class Product extends Model
     private int $price;
     private string $image;
 
-    public function __construct(int $id, string $productName, string $description, int $price, string $image)
-    {
-        parent::__construct();
-        $this->id = $id;
-        $this->productName = $productName;
-        $this->description = $description;
-        $this->price = $price;
-        $this->image = $image;
-    }
 
     // Метод для получения всех продуктов из базы данных
     public function getAllProducts(): array|null
@@ -32,13 +23,16 @@ class Product extends Model
 
         $products = [];
         foreach ($productsData as $data) {
-            $products[] = new self(
-                $data['id'],
-                $data['productName'],
-                $data['description'],
-                $data['price'],
-                $data['image']
-            );
+
+            $product = new self();
+
+            $product->id = $data['id'];
+            $product->productName = $data['productname'];
+            $product->description = $data['description'];
+            $product->price = $data['price'];
+            $product->image = $data['image'];
+
+            $products[] = $product;
         }
 
         return $products;
@@ -50,65 +44,70 @@ class Product extends Model
         $stmt = $this->pdo->prepare("SELECT * FROM products WHERE id = :id");
         $stmt->execute(['id' => $productId]);
 
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $data = $stmt->fetch();
 
-        if ($data) {
-            return new self(
-                $data['id'],
-                $data['productName'],
-                $data['description'],
-                $data['price'],
-                $data['image']
-            );
+        if ($data === false) {
+            return null;
         }
-        return null;
+        $obj = new self;
+        $obj->id = $data['id'];
+        $obj->productName = $data['productname'];
+        $obj->description = $data['description'];
+        $obj->price = $data['price'];
+        $obj->image = $data['image'];
+        return $obj;
     }
 
     // Метод для получения нескольких продуктов по их идентификаторам
-    public function getAllById(array $productIds): array|null
+    public function getAllById(array $productId): array
     {
-        $placeHolders = implode(',', array_fill(0, count($productIds), '?'));
+        if (empty($productId)) {
+            return [];
+        }
+
+        $placeHolders = implode(',', array_fill(0, count($productId), '?'));
         $stmt = $this->pdo->prepare("SELECT * FROM products WHERE id IN ($placeHolders)");
-        $stmt->execute($productIds);
 
-        $productsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->execute($productId);
+        $productsData = $stmt->fetchAll();
+
         $products = [];
-
-        if(empty ($productsData)) {
-            return null;
-        }
-
         foreach ($productsData as $data) {
-            $products[] = new self(
-                $data['id'],
-                $data['productName'],
-                $data['description'],
-                $data['price'],
-                $data['image']
-            );
+            $product = new self();
+            $product->id = $data['id'];
+            $product->productName = $data['productname'];
+            $product->description = $data['description'];
+            $product->price = $data['price'];
+            $product->image = $data['image'];
+
+            $products[] = $product;
         }
 
-        return $products;
+        return $products; // Возвращаем массив продуктов
     }
 
-    public function getProductById($productId): self|null {
+    public function getProductById($productId): self|null
+    {
         $stmt = $this->pdo->prepare("SELECT * FROM products WHERE id = :productId");
         $stmt->execute(['productId' => $productId]);
 
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $data = $stmt->fetch();
 
-        if ($data) {
-            return new self(
-                $data['id'],
-                $data['productName'],
-                $data['description'],
-                $data['price'],
-                $data['image']
-            );
+        if ($data === false) {
+            return null;
         }
+            $obj = new self;
+            $obj->id = $data['id'];
+            $obj->productName = $data['productname'];
+            $obj->description = $data['description'];
+            $obj->price = $data['price'];
+            $obj->image = $data['image'];
+            return $obj;
 
-        return null;
     }
+
+
+
 
     public function getId(): int
     {

@@ -1,6 +1,9 @@
 <?php
 namespace Controller;
 use Model\User;
+use Request\RegistrateRequest;
+use Request\Request;
+
 class UserController
 {
     private User $userModel;
@@ -14,14 +17,14 @@ class UserController
         require_once './../view/registration.php';
     }
 
-    public function handleRegistrationForm(): void
+    public function handleRegistrationForm(RegistrateRequest $request): void
     {
-        $errors = $this->validateRegistrationForm($_POST);
+        $errors = $request->validate();
 
         if (empty($errors)) {
-            $name = trim($_POST['name']);
-            $email = trim($_POST['email']);
-            $password = trim($_POST['psw']);
+            $name = $request->getName();
+            $email = $request->getEmail();
+            $password = $request->getPassword();
 
             $user = $this->userModel->getOneByEmail($email);
 
@@ -55,7 +58,6 @@ class UserController
             $email = trim($_POST['email']);
             $password = trim($_POST['password']);
 
-            // Получаем пользователя по email
             $user = $this->userModel->getOneByEmail($email);
             if ($user === null || !password_verify($password, $user->getPassword())) {
                 $errors['email'] = 'Логин или пароль указаны неверно';
@@ -70,47 +72,7 @@ class UserController
     }
 
 
-    private function validateRegistrationForm(array $data): array
-    {
-        $errors = [];
 
-        if (isset($data['name'])) {
-            $name = trim($data['name']);
-            if (empty($name)) {
-                $errors['name'] = "Имя обязательно";
-            } elseif (strlen($name) < 3) {
-                $errors['name'] = "В имени должно быть не менее 3 символов";
-            }
-        }
-
-        if (isset($data['email'])) {
-            $email = trim($data['email']);
-            if (empty($email)) {
-                $errors['email'] = "Требуется адрес электронной почты";
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors['email'] = "Неверный формат электронной почты";
-            }
-        }
-
-        if (isset($data['psw'])) {
-            $password = $data['psw'];
-            if (empty($password)) {
-                $errors['psw'] = "Требуется пароль";
-            } elseif (strlen($password) < 6) {
-                $errors['psw'] = "Пароль должен содержать не менее 6 символов";
-            }
-        }
-
-        if (isset($data['psw-repeat'])) {
-            $passwordRepeat = $data['psw-repeat'];
-            if (empty($passwordRepeat)) {
-                $errors['psw-repeat'] = "Повторите пароль";
-            } elseif ($data['psw'] !== $passwordRepeat) {
-                $errors['psw-repeat'] = "Пароли не совпадают";
-            }
-        }
-        return $errors;
-    }
 
     private function validateLoginForm(array $data): array
     {

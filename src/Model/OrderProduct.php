@@ -9,16 +9,6 @@ class OrderProduct extends Model
     private int $amount;
     private int $total;
 
-    public function __construct(int $id, int $orderId, int $productId, int $amount, int $total){
-        parent::__construct();
-
-        $this->id = $id;
-        $this->orderId = $orderId;
-        $this->productId = $productId;
-        $this->amount = $amount;
-        $this->total = $total;
-
-    }
 
     public function createOrderDetail(int $orderId, int $productId, int $amount, float $total): bool
     {
@@ -45,13 +35,13 @@ class OrderProduct extends Model
 
         $orderProducts = [];
         foreach ($orderProductsData as $data) {
-            $orderProducts[] = new OrderProduct(
-                $data['id'],
-                $data['order_id'],
-                $data['product_id'],
-                $data['amount'],
-                $data['total']
-            );
+            $orderProduct = new self();
+                $orderProduct->id = $data['id'];
+                $orderProduct->orderId = $data['order_id'];
+                $orderProduct->productId = $data['product_id'];
+                $orderProduct->amount = $data['amount'];
+                $orderProduct->total = $data['total'];
+                $orderProducts[] = $orderProduct;
         }
 
         return $orderProducts;

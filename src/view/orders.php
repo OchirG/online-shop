@@ -26,9 +26,10 @@
 
         .catalog {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px; /* Расстояние между заказами */
+            flex-direction: row; /* Горизонтальное расположение */
+            flex-wrap: wrap; /* Позволяет элементам переходить на следующую строку */
+            justify-content: center; /* Центрирование элементов */
+            gap: 20px; /* Расстояние между заказами */
             padding: 20px;
         }
 
@@ -36,7 +37,7 @@
             background-color: rgba(255, 255, 0, 0.17);
             border: 2px solid gold;
             border-radius: 10px;
-            width: 200px; /* Уменьшенная ширина карточек */
+            width: 200px; /* Ширина карточек */
             padding: 10px; /* Отступы внутри карточки */
             text-align: center;
             cursor: pointer; /* Указываем, что карточка кликабельна */
@@ -53,13 +54,24 @@
         }
 
         .card img {
-            width: 100%; /* Ширина изображения занимает 100% карточки */
+            width: 80%; /* Уменьшено с 100% до 80% */
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+            margin: 0 auto; /* Центрирование изображения */
         }
 
         .card h2 {
-            margin: 10px 0;
+            margin: 5px 0; /* Уменьшены отступы сверху и снизу */
+            font-size: 18px; /* Уменьшите размер шрифта заголовка */
+        }
+
+        .card h3 {
+            margin: 5px 0; /* Уменьшенные отступы для описания */
+            font-size: 14px; /* Уменьшите размер шрифта описания */
+        }
+
+        .card p {
+            font-size: 12px; /* Уменьшите размер шрифта для цены */
         }
 
         button {
@@ -89,19 +101,19 @@
 <div class="catalog">
     <?php if (!empty($orders)): ?>
         <?php foreach ($orders as $order): ?>
-            <div class="card" onclick="toggleOrder(<?php echo $order['id']; ?>)">
-                <h2>Заказ №<?php echo htmlspecialchars($order['id']); ?></h2>
-                <div id="order-content-<?php echo $order['id']; ?>" class="card-content">
-                    <?php if (!empty($order['products'])): ?>
-                        <?php foreach ($order['products'] as $product): ?>
+            <div class="card" onclick="toggleOrder(<?php echo $order->getId(); ?>)">
+                <h2>Заказ №<?php echo htmlspecialchars($order->getId()); ?></h2>
+                <div id="order-content-<?php echo $order->getId(); ?>" class="card-content">
+                    <?php if (!empty($order->products)): ?>
+                        <?php foreach ($order->products as $product): ?>
                             <div>
-                                <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['productname']); ?>">
-                                <h2><?php echo htmlspecialchars($product['productname']); ?></h2>
-                                <h3><?php echo htmlspecialchars($product['description']); ?></h3>
-                                <p>Цена: <?php echo htmlspecialchars($product['price']); ?> рублей.</p>
+                                <img src="<?php echo htmlspecialchars($product->getImage()); ?>" alt="<?php echo htmlspecialchars($product->getProductName()); ?>">
+                                <h2><?php echo htmlspecialchars($product->getProductName()); ?></h2>
+                                <h3><?php echo htmlspecialchars($product->getDescription()); ?></h3>
+                                <p>Цена: <?php echo htmlspecialchars($product->getPrice()); ?> рублей.</p>
                                 <form method="POST" action="/add-product">
-                                    <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
-                                    <input type="number" name="amount" value="<?php echo htmlspecialchars($product['order_amount']); ?>" min="1">
+                                    <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product->getId()); ?>">
+                                    <input type="number" name="amount" value="<?php echo htmlspecialchars($product->order_amount); ?>" min="1">
                                     <button type="submit">Купить</button>
                                 </form>
                             </div>
@@ -130,4 +142,3 @@
 
 </body>
 </html>
-

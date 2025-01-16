@@ -11,17 +11,25 @@
     <p>Ваша корзина пуста.</p>
 <?php else: ?>
     <ul>
-        <?php foreach ($products as $product): ?>
+        <?php
+        $total = 0;
+        foreach ($products as $product):
+            $price = $product->getPrice();
+            $amount = $product->quantity; // теперь используем свойство quantity
+            $total += $amount * $price;
+            ?>
             <li>
-                <img src="<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['productname']) ?>" style="width: 100px; height: auto;">
-                <?= htmlspecialchars($product['productname']) ?> - <?= $product['amount'] ?> шт. по <?= $product['price'] ?> рублей
+                <img src="<?= htmlspecialchars($product->getImage()) ?>" alt="<?= htmlspecialchars($product->getProductName()) ?>" style="width: 100px; height: auto;">
+                <?= htmlspecialchars($product->getProductName()) ?> - <?= $amount ?> шт. по <?= $price ?> рублей
             </li>
         <?php endforeach; ?>
     </ul>
-    <h2>Итого: <?php echo $product['amount']*$product['price'] ?> рублей</h2>
+    <h2>Итого: <?= $total ?> рублей</h2>
 <?php endif; ?>
+
+<!-- Форма для удаления продуктов из корзины -->
 <form method="POST" action="/remove-product">
-    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+    <input type="hidden" name="product_id" value="<?= $product->getId() ?? '' ?>">
     <button type="submit">Удалить из корзины</button>
 </form>
 <a href="/catalog">Продолжить покупки</a>
@@ -58,8 +66,8 @@
     }
 
     li {
-        background: rgba(255, 255, 255, 0.61);
-        border: 1px solid rgba(221, 221, 221, 0.66);
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(221, 221, 221, 0.44);
         margin: 10px 0;
         padding: 10px;
         border-radius: 5px;
