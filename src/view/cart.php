@@ -15,23 +15,23 @@
         $total = 0;
         foreach ($products as $product):
             $price = $product->getPrice();
-            $amount = $product->quantity; // теперь используем свойство quantity
+            $amount = $product->getAmount();
             $total += $amount * $price;
             ?>
             <li>
                 <img src="<?= htmlspecialchars($product->getImage()) ?>" alt="<?= htmlspecialchars($product->getProductName()) ?>" style="width: 100px; height: auto;">
                 <?= htmlspecialchars($product->getProductName()) ?> - <?= $amount ?> шт. по <?= $price ?> рублей
+
+                <form method="POST" action="/cart" style="display:inline;">
+                    <input type="hidden" name="product_id" value="<?= $product->getId() ?>">
+                    <button type="submit">Удалить из корзины</button>
+                </form>
             </li>
         <?php endforeach; ?>
     </ul>
     <h2>Итого: <?= $total ?> рублей</h2>
 <?php endif; ?>
 
-<!-- Форма для удаления продуктов из корзины -->
-<form method="POST" action="/remove-product">
-    <input type="hidden" name="product_id" value="<?= $product->getId() ?? '' ?>">
-    <button type="submit">Удалить из корзины</button>
-</form>
 <a href="/catalog">Продолжить покупки</a>
 <a href="/logout">Выйти</a>
 <a href="/order">Оформить заказ</a>

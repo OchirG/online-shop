@@ -9,7 +9,6 @@ class Order extends Model
     private string $address;
     private string $number;
 
-
     public function createOrder(int $userId, string $name, string $email, string $address, string $number): int
     {
 
@@ -81,6 +80,8 @@ class Order extends Model
     {
         return $this->number;
     }
+
+
 }
 
 

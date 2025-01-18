@@ -1,8 +1,14 @@
 <?php
 namespace Core;
 
-class App {
+use Request\Request;
+use Request\RegistrateRequest;
+use Request\LoginRequest;
+use Request\AddProductRequest;
+use Request\OrderRequest;
 
+
+class App {
     private array $routes = [];
 
     public function run(): void {
@@ -15,59 +21,39 @@ class App {
             $controllerMethod = $route['method'];
 
             $controller = new $controllerClass();
-            $request = new Request($uri, $method, $_POST);
 
-            $controller->$controllerMethod($request);
+            $request = $this->createRequestObject($uri, $method);
+
+            if ($request) {
+                $controller->$controllerMethod($request);
+            } else {
+                require_once './../view/404.php'; // Для ненайденного запроса
+            }
         } else {
             require_once './../view/404.php';
         }
     }
 
-    public function addRoute(string $uriName, string $uriMethod, string $className, string $method): void {
-        if(!isset($this->routes[$uriName][$uriMethod])) {
-            $this->routes[$uriName][$uriMethod]['class'] = $className;
-            $this->routes[$uriName][$uriMethod]['method'] = $method;
-        }else{
-            echo "$uriMethod зарегистрирован для $uriName";
+    private function createRequestObject(string $uri, string $method): ?Request {
+        if ($uri === '/registration' && $method === 'POST') {
+            return new RegistrateRequest($uri, $method, $_POST);
+        } elseif ($uri === '/login' && $method === 'POST') {
+            return new LoginRequest($uri, $method, $_POST);
+        } elseif (preg_match('/^\/order/', $uri)) {
+            return new OrderRequest($uri, $method, $_POST);
+        } elseif ($uri === '/add-product' && $method === 'POST') {
+            return new AddProductRequest($uri, $method, $_POST);
         }
 
+        return new Request($uri, $method, $_POST);
+    }
 
+    public function addRoute(string $uriName, string $uriMethod, string $className, string $method): void {
+        if (!isset($this->routes[$uriName][$uriMethod])) {
+            $this->routes[$uriName][$uriMethod]['class'] = $className;
+            $this->routes[$uriName][$uriMethod]['method'] = $method;
+        } else {
+            echo "$uriMethod зарегистрирован для $uriName";
+        }
     }
 }
-//    private array $routes = [
-//        '/registration' => [
-//            'GET' => ['class' => 'Controller\UserController', 'method' => 'getRegistrationForm'],
-//            'POST' => ['class' => 'Controller\UserController', 'method' => 'handleRegistrationForm']
-//        ],
-//        '/login' => [
-//            'GET' => ['class' => 'Controller\UserController', 'method' => 'getLoginForm'],
-//            'POST' => ['class' => 'Controller\UserController', 'method' => 'handleLoginForm']
-//        ],
-//        '/catalog' => [
-//            'GET' => ['class' => 'Controller\CatalogController', 'method' => 'getCatalogPage']
-//        ],
-//        '/add-product' => [
-//            'GET' => ['class' => 'Controller\UserProductController', 'method' => 'getAddProductForm'],
-//            'POST' => ['class' => 'Controller\UserProductController', 'method' => 'handleAddUserProductForm']
-//        ],
-//        '/cart' => [
-//            'GET' => ['class' => 'Controller\CartController', 'method' => 'getCartPage']
-//        ],
-//        '/logout' => [
-//            'GET' => ['class' => 'Controller\UserController', 'method' => 'logout']
-//        ],
-//        '/remove-product'=> [
-//            'GET' => ['class' => 'Controller\CartController', 'method' => 'removeProductFromCart']
-//        ],
-//        '/order' => [
-//            'GET' => ['class' => 'Controller\OrderController', 'method' => 'getOrderForm'],
-//            'POST' => ['class' => 'Controller\OrderController', 'method' => 'handleOrder']
-//        ],
-//        '/order/confirm' => [
-//            'GET' => ['class' => 'Controller\OrderController', 'method' => 'getOrderConfirmForm']
-//        ],
-//        '/orders'=>[
-//            'GET' => ['class' => 'Controller\OrderController', 'method' => 'getOrders'],
-//        ]
-//
-//    ];

@@ -72,4 +72,5 @@ class OrderProduct extends Model
         return $this->total;
     }
 
+
 }

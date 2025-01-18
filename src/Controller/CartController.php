@@ -28,14 +28,14 @@ class CartController
         // Получаем список товаров в корзине
         $userProducts = $this->userProductModel->getAllByUserId($userId);
 
-        if (empty($userProducts)) {
+        // Инициализация массива товаров
+        $products = []; // Инициализируем массив товаров
 
-            $products = [];
-        } else {
+        if (!empty($userProducts)) {
             // Извлекаем идентификаторы продуктов
             $productIds = [];
             foreach ($userProducts as $userProduct) {
-                $productIds[] = $userProduct->getProductId(); // предполагается, что метод getProductId() возвращает product_id
+                $productIds[] = $userProduct->getProductId();
             }
 
             // Получаем все продукты по идентификаторам
@@ -47,23 +47,17 @@ class CartController
             }
 
             // Добавляем количество товаров в массив
-            $productQuantities = [];
-
-// Проходим по товарам пользователя
             foreach ($userProducts as $userProduct) {
                 $productId = $userProduct->getProductId();
                 $amount = $userProduct->getAmount();
 
                 // Проверяем, существует ли продукт в схеме productMap
                 if (isset($productMap[$productId])) {
-                    // Добавляем объект продукта и его количество в итоговый массив
-                    $productMap[$productId]->quantity = $amount;  // добавляем количество как свойство
+                    $productMap[$productId]-> setAmount($amount);  // добавляем количество как свойство
                     $products[] = $productMap[$productId];
                 }
             }
-
         }
-
 
         require_once './../view/cart.php';
     }

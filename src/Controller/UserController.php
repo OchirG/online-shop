@@ -1,8 +1,8 @@
 <?php
 namespace Controller;
 use Model\User;
+use Request\LoginRequest;
 use Request\RegistrateRequest;
-use Request\Request;
 
 class UserController
 {
@@ -26,17 +26,22 @@ class UserController
             $email = $request->getEmail();
             $password = $request->getPassword();
 
-            $user = $this->userModel->getOneByEmail($email);
-
-            if ($user) {
-                $errors['email'] = "Пользователь с таким адресом электронной почты уже существует";
+            // Валидация email
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $errors['email'] = "Некорректный адрес электронной почты";
             } else {
-                $hashPassword = password_hash($password, PASSWORD_DEFAULT);
-                if ($this->userModel->create($name, $email, $hashPassword)) {
-                    header("Location: /login");
-                    exit;
+                $user = $this->userModel->getOneByEmail($email);
+
+                if ($user) {
+                    $errors['email'] = "Пользователь с таким адресом электронной почты уже существует";
                 } else {
-                    $errors['name'] = "Ошибка при создании пользователя";
+                    $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+                    if ($this->userModel->create($name, $email, $hashPassword)) {
+                        header("Location: /login");
+                        exit;
+                    } else {
+                        $errors['general'] = "Ошибка при создании пользователя";
+                    }
                 }
             }
         }
@@ -49,14 +54,14 @@ class UserController
         require_once './../view/login.php';
     }
 
-    public function handleLoginForm(): void
+    public function handleLoginForm(LoginRequest $request): void
     {
         session_start();
-        $errors = $this->validateLoginForm($_POST);
+        $errors = $request->validate();
 
         if (empty($errors)) {
-            $email = trim($_POST['email']);
-            $password = trim($_POST['password']);
+            $email = $request->getEmail();
+            $password = $request->getPassword();
 
             $user = $this->userModel->getOneByEmail($email);
             if ($user === null || !password_verify($password, $user->getPassword())) {
@@ -70,35 +75,6 @@ class UserController
 
         require_once './../view/login.php';
     }
-
-
-
-
-    private function validateLoginForm(array $data): array
-    {
-        $errors = [];
-
-        if (isset($data['email'])) {
-            $email = ($data['email']);
-            if (empty($email)) {
-                $errors['email'] = 'Требуется адрес электронной почты';
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors['email'] = 'Неверный адрес электронной почты';
-            }
-        }
-
-        if (isset($data['psw'])) {
-            $password = ($data['psw']);
-            if (empty($password)) {
-                $errors['psw'] = 'Требуется пароль';
-            } elseif (strlen($password) < 6) {
-                $errors['psw'] = 'Пароль должен содержать не менее 6 символов';
-            }
-        }
-
-        return $errors;
-    }
-
     public function logout(): void
     {
         session_start();

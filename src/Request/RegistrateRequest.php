@@ -12,7 +12,7 @@ class RegistrateRequest extends Request
     }
 
     public function getPassword(){
-        return $this->data['password'];
+        return $this->data['psw'];
     }
 
     public function validate(): array

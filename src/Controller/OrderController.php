@@ -4,6 +4,8 @@ use Model\Product;
 use Model\OrderProduct;
 use Model\Order;
 use Model\UserProduct;
+use Request\OrderRequest;
+
 class OrderController {
     private Order $order;
     private OrderProduct $orderProduct;
@@ -22,14 +24,16 @@ class OrderController {
     public function getOrderConfirmForm(){
         require_once './../view/order_confirm.php';
     }
-    public function handleOrder(): void {
+    public function handleOrder(OrderRequest $request): void {
         $this->checkSession();
 
+        //$errors = $request->validate();
+
         $userId = $_SESSION['user_id'];
-        $name = trim($_POST['name']);
-        $email = trim($_POST['email']);
-        $address = trim($_POST['address']);
-        $number = trim($_POST['number']);
+        $name = $request->getName();
+        $email = $request->getEmail();
+        $address = $request->getAddress();
+        $number = $request->getNumber();
 
         $userProducts = $this->userProduct->getAllByUserId($userId);
 
@@ -48,9 +52,9 @@ class OrderController {
                 $product = $this->product->getProductById($productId);
                 if ($product === null) {
                     echo "Не удалось получить информацию о продукте с ID: $productId.";
-
+                    continue; // Можно продолжить с других продуктов
                 }
-
+                // Используйте price из объекта Product
                 $total = $product->getPrice() * $amount;
 
                 $this->orderProduct->createOrderDetail($orderId, $productId, $amount, $total);
@@ -66,6 +70,7 @@ class OrderController {
     }
     public function getOrders()
     {
+
         $this->checkSession();
         $userId = $_SESSION['user_id'];
         $orders = $this->order->getAllByUserId($userId);

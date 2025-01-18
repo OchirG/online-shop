@@ -9,6 +9,10 @@ class Product extends Model
     private string $description;
     private int $price;
     private string $image;
+    private ?int $orderAmount = null;
+    private ?int $orderPrice = null;
+    private ?int $amount = null;
+
 
 
     // Метод для получения всех продуктов из базы данных
@@ -133,4 +137,27 @@ class Product extends Model
     {
         return $this->image;
     }
+
+    public function setOrderAmount(?int $orderAmount): void
+    {
+        $this->orderAmount = $orderAmount;
+    }
+
+    public function setOrderPrice(?int $orderPrice): void
+    {
+        $this->orderPrice = $orderPrice;
+    }
+
+    public function setAmount(): ?int
+    {
+        return $this->amount;
+    }
+
+    public function getAmount(): ?int
+    {
+        return $this->amount;
+    }
+
+
+
 }
