@@ -28,8 +28,8 @@ class CartController
         // Получаем список товаров в корзине
         $userProducts = $this->userProductModel->getAllByUserId($userId);
 
-        // Инициализация массива товаров
-        $products = []; // Инициализируем массив товаров
+
+        $products = [];
 
         if (!empty($userProducts)) {
             // Извлекаем идентификаторы продуктов
@@ -51,9 +51,9 @@ class CartController
                 $productId = $userProduct->getProductId();
                 $amount = $userProduct->getAmount();
 
-                // Проверяем, существует ли продукт в схеме productMap
+
                 if (isset($productMap[$productId])) {
-                    $productMap[$productId]-> setAmount($amount);  // добавляем количество как свойство
+                    $productMap[$productId]-> setAmount($amount);
                     $products[] = $productMap[$productId];
                 }
             }
@@ -61,17 +61,17 @@ class CartController
 
         require_once './../view/cart.php';
     }
-//    public function removeProductFromCart(): void
-//    {
-//        $this->checkSession();
-//
-//        $userId = $_SESSION['user_id'];
-//
-//        $this->userProductModel->clearCartByUserId($userId);
-//
-//            header('Location: /cart');
-//            exit();
-//        }
+    public function removeProductFromCart(): void
+    {
+        $this->checkSession();
+
+        $userId = $_SESSION['user_id'];
+
+        $this->userProductModel->clearCartByUserId($userId);
+
+            header('Location: /cart');
+            exit();
+        }
 
     private function checkSession(): void
     {

@@ -10,6 +10,7 @@ class OrderProduct extends Model
     private int $total;
 
 
+
     public function createOrderDetail(int $orderId, int $productId, int $amount, float $total): bool
     {
         $stmt = $this->pdo->prepare("INSERT INTO orders_products (order_id, product_id, amount, total) VALUES (:order_id, :product_id, :amount, :total)");

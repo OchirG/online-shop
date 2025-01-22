@@ -104,17 +104,17 @@
             <div class="card" onclick="toggleOrder(<?php echo $order->getId(); ?>)">
                 <h2>Заказ №<?php echo htmlspecialchars($order->getId()); ?></h2>
                 <div id="order-content-<?php echo $order->getId(); ?>" class="card-content">
-                    <?php if (!empty($order->products)): ?>
-                        <?php foreach ($order->products as $product): ?>
+                    <?php if (!empty($order->getProducts())): ?>
+                        <?php foreach ($order->getProducts() as $product): ?>
                             <div>
                                 <img src="<?php echo htmlspecialchars($product->getImage()); ?>" alt="<?php echo htmlspecialchars($product->getProductName()); ?>">
                                 <h2><?php echo htmlspecialchars($product->getProductName()); ?></h2>
                                 <h3><?php echo htmlspecialchars($product->getDescription()); ?></h3>
                                 <p>Цена: <?php echo htmlspecialchars($product->getPrice()); ?> рублей.</p>
-                                <form method="POST" action="/add-product">
+                                <h2 method="POST" action="/add-product">
                                     <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product->getId()); ?>">
-                                    <input type="number" name="amount" value="<?php echo htmlspecialchars($product->order_amount); ?>" min="1">
-                                    <button type="submit">Купить</button>
+                                    <h2> Количестов : <?php echo $product->getOrderAmount(); ?></h2>
+                                    <h2>Итого: <?= $total ?> рублей</h2>
                                 </form>
                             </div>
                         <?php endforeach; ?>

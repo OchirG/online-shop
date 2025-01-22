@@ -8,6 +8,8 @@ class Order extends Model
     private string $email;
     private string $address;
     private string $number;
+    private array $products = [];
+    private ?int $total = null;
 
     public function createOrder(int $userId, string $name, string $email, string $address, string $number): int
     {
@@ -80,6 +82,29 @@ class Order extends Model
     {
         return $this->number;
     }
+
+    public function getProducts(): array
+    {
+        return $this->products;
+    }
+
+    public function setProducts(array $products): void
+    {
+        $this->products = $products;
+    }
+
+    public function getTotal(): ?int
+    {
+        return $this->total;
+    }
+
+    public function setTotal(?int $total): void
+    {
+        $this->total = $total;
+    }
+
+
+
 
 
 }

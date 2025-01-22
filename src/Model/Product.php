@@ -148,10 +148,21 @@ class Product extends Model
         $this->orderPrice = $orderPrice;
     }
 
-    public function setAmount(): ?int
+    public function setAmount(?int $amount): void
     {
-        return $this->amount;
+        $this->amount = $amount;
     }
+
+    public function getOrderAmount(): ?int
+    {
+        return $this->orderAmount;
+    }
+
+    public function getOrderPrice(): ?int
+    {
+        return $this->orderPrice;
+    }
+
 
     public function getAmount(): ?int
     {

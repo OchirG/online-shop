@@ -1,7 +1,6 @@
 <?php
 namespace Controller;
 use Model\UserProduct;
-use Request\Request;
 use Request\AddProductRequest;
 
 class UserProductController

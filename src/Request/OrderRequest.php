@@ -46,19 +46,19 @@ class OrderRequest extends Request
             $errors[] = "Адрес не должен превышать 255 символов.";
         }
 
-        if (empty($this->data['number'])) {
-            $errors[] = "Номер телефона не может быть пустым.";
-        } elseif (!preg_match('/^\+?[0-9]{10,15}$/', $this->data['number'])) { // Пример простой валидации номера телефона
-            $errors[] = "Неверный формат номера телефона. Должен составлять от 10 до 15 цифр.";
-        }
-
-        if (!empty($errors)) {
-
-            foreach ($errors as $error) {
-                echo "<div class='error'>$error</div>";
-            }
-            return;
-        }
+//        if (empty($this->data['number'])) {
+//            $errors[] = "Номер телефона не может быть пустым.";
+//        } elseif (!preg_match('/^\+?[0-9]{10,15}$/', $this->data['number'])) {
+//            $errors[] = "Неверный формат номера телефона. Должен составлять от 10 до 15 цифр.";
+//        }
+//
+//        if (!empty($errors)) {
+//
+//            foreach ($errors as $error) {
+//                echo $error;
+//            }
+//            return;
+//        }
     }
 
 }
