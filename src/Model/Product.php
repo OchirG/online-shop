@@ -16,9 +16,9 @@ class Product extends Model
 
 
     // Метод для получения всех продуктов из базы данных
-    public function getAllProducts(): array|null
+    public static function getAllProducts(): array|null
     {
-        $stmt = $this->pdo->query("SELECT * FROM products ORDER BY id");
+        $stmt = self::getPdo()->query("SELECT * FROM products ORDER BY id");
         $productsData = $stmt->fetchAll();
 
         if (empty($productsData)) {
@@ -43,9 +43,9 @@ class Product extends Model
     }
 
     // Метод для получения одного продукта по его идентификатору
-    public function getOneById(int $productId): self|null
+    public static function getOneById(int $productId): self|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM products WHERE id = :id");
+        $stmt = self::getPdo()->prepare("SELECT * FROM products WHERE id = :id");
         $stmt->execute(['id' => $productId]);
 
         $data = $stmt->fetch();
@@ -63,14 +63,14 @@ class Product extends Model
     }
 
     // Метод для получения нескольких продуктов по их идентификаторам
-    public function getAllById(array $productId): array
+    public static function getAllById(array $productId): array
     {
         if (empty($productId)) {
             return [];
         }
 
         $placeHolders = implode(',', array_fill(0, count($productId), '?'));
-        $stmt = $this->pdo->prepare("SELECT * FROM products WHERE id IN ($placeHolders)");
+        $stmt = self::getPdo()->prepare("SELECT * FROM products WHERE id IN ($placeHolders)");
 
         $stmt->execute($productId);
         $productsData = $stmt->fetchAll();
@@ -90,9 +90,9 @@ class Product extends Model
         return $products; // Возвращаем массив продуктов
     }
 
-    public function getProductById($productId): self|null
+    public static function getProductById($productId): self|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM products WHERE id = :productId");
+        $stmt = self::getPdo()->prepare("SELECT * FROM products WHERE id = :productId");
         $stmt->execute(['productId' => $productId]);
 
         $data = $stmt->fetch();

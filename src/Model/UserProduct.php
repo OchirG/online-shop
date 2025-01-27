@@ -9,9 +9,9 @@ class UserProduct extends Model
     private int $amount;
 
     // Метод для вставки или обновления записи о продукте для пользователя
-    public function getAddProduct($userId, $productId, $amount): bool
+    public static function getAddProduct($userId, $productId, $amount): bool
     {
-        $stmt = $this->pdo->prepare("
+        $stmt = self::getPdo()->prepare("
             INSERT INTO user_products (user_id, product_id, amount)
             VALUES (:user_id, :product_id, :amount)
             ON CONFLICT (user_id, product_id) 
@@ -21,9 +21,9 @@ class UserProduct extends Model
     }
 
     // метод для получения всех продуктов для конкретного пользователя, с сортировкой по идентификатору продукта.
-    public function getAllByUserId(int $userId): ?array
+    public static function getAllByUserId(int $userId): ?array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :user_id ORDER BY product_id");
+        $stmt = self::getPdo()->prepare("SELECT * FROM user_products WHERE user_id = :user_id ORDER BY product_id");
         $stmt->execute(['user_id' => $userId]);
         $productsData = $stmt->fetchAll();
 
@@ -69,10 +69,11 @@ class UserProduct extends Model
         return $this->amount;
     }
 
-    public function clearCartByUserId(int $userId): bool
+    public function removeProductFromCart(int $userId, int $productId): bool
     {
-        $stmt = $this->pdo->prepare("DELETE FROM user_products WHERE user_id = :user_id");
+        $stmt = self::getPdo()->prepare("DELETE FROM user_products WHERE user_id = :user_id AND product_id = :product_id");
         $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $stmt->bindParam(':product_id', $productId, PDO::PARAM_INT);
 
         return $stmt->execute();
     }

@@ -3,13 +3,16 @@ namespace Controller;
 use Model\User;
 use Request\LoginRequest;
 use Request\RegistrateRequest;
+use Service\AuthService;
 
 class UserController
 {
     private User $userModel;
+    private AuthService $authService;
 
     public function __construct() {
         $this->userModel = new User();
+        $this->authService = new AuthService();
     }
 
     public function getRegistrationForm(): void
@@ -26,7 +29,6 @@ class UserController
             $email = $request->getEmail();
             $password = $request->getPassword();
 
-            // Валидация email
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = "Некорректный адрес электронной почты";
             } else {
@@ -40,7 +42,7 @@ class UserController
                         header("Location: /login");
                         exit;
                     } else {
-                        $errors['general'] = "Ошибка при создании пользователя";
+                        $errors['errors'] = "Ошибка при создании пользователя";
                     }
                 }
             }
@@ -56,24 +58,32 @@ class UserController
 
     public function handleLoginForm(LoginRequest $request): void
     {
-        session_start();
+        $this->checkSession();
+
         $errors = $request->validate();
 
         if (empty($errors)) {
             $email = $request->getEmail();
             $password = $request->getPassword();
+            $loginResult = $this->authService->login($email, $password);
 
-            $user = $this->userModel->getOneByEmail($email);
-            if ($user === null || !password_verify($password, $user->getPassword())) {
-                $errors['email'] = 'Логин или пароль указаны неверно';
-            } else {
-                $_SESSION['user_id'] = $user->getId();
+            if ($loginResult['success']) {
                 header("Location: /catalog");
-                exit;
+                exit();
+            } else {
+                $errors['login'] = $loginResult['error'];
             }
         }
 
         require_once './../view/login.php';
+    }
+
+    private function checkSession(): void {
+
+        if (!$this->authService->check()) {
+            header('Location: /login');
+            exit;
+        }
     }
     public function logout(): void
     {

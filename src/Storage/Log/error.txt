@@ -1,0 +1,22 @@
+
+
+Ошибка: Call to undefined method Request\OrderRequest::getddress()
+Файл: /var/www/html/src/Controller/OrderController.php
+Строка: 49
+Время: 2025-01-27 12:59:23
+
+Ошибка: DataTransferObject\CreateOrderDTO::__construct(): Argument #1 ($name) must be of type string, null given, called in /var/www/html/src/Controller/OrderController.php on line 53
+Файл: /var/www/html/src/DataTransferObject/CreateOrderDTO.php
+Строка: 7
+Время: 2025-01-27 13:00:17
+
+Ошибка: Typed static property Model\Model::$pdo must not be accessed before initialization
+Файл: /var/www/html/src/Model/Model.php
+Строка: 13
+Время: 2025-01-27 14:31:38
+
+Ошибка: syntax error, unexpected token "endforeach", expecting "elseif" or "else" or "endif"
+Файл: /var/www/html/src/view/orders.php
+Строка: 130
+Время: 2025-01-27 17:14:28
+

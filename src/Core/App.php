@@ -6,6 +6,7 @@ use Request\RegistrateRequest;
 use Request\LoginRequest;
 use Request\AddProductRequest;
 use Request\OrderRequest;
+use Service\LoggerService;
 
 
 class App {
@@ -21,16 +22,17 @@ class App {
             $controllerMethod = $route['method'];
 
             $controller = new $controllerClass();
-
             $request = $this->createRequestObject($uri, $method);
 
-            if ($request) {
+            try {
                 $controller->$controllerMethod($request);
-            } else {
-                require_once './../view/404.php'; // Для ненайденного запроса
+
+            } catch (\Throwable $exception) {
+                LoggerService::log($exception);
+
+                http_response_code(500);
+                require_once './../view/500.php';
             }
-        } else {
-            require_once './../view/404.php';
         }
     }
 
@@ -39,7 +41,7 @@ class App {
             return new RegistrateRequest($uri, $method, $_POST);
         } elseif ($uri === '/login' && $method === 'POST') {
             return new LoginRequest($uri, $method, $_POST);
-        } elseif (preg_match('/^\/order/', $uri)) {
+        } elseif ($uri === '/order' && $method === 'POST') {
             return new OrderRequest($uri, $method, $_POST);
         } elseif ($uri === '/add-product' && $method === 'POST') {
             return new AddProductRequest($uri, $method, $_POST);

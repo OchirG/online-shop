@@ -1,13 +1,17 @@
 <?php
 namespace Controller;
 use Model\Product;
+use Service\AuthService;
+
 class CatalogController
 {
     private Product $productModel;
+    private AuthService $authService;
 
     public function __construct()
     {
         $this->productModel = new Product();
+        $this->authService = new AuthService();
     }
 
     // метод отвечает за отображение страницы каталога с продуктами
@@ -27,7 +31,7 @@ class CatalogController
     private function checkSession(): void
     {
         session_start();
-        if(!isset($_SESSION['user_id'])){
+        if(!$this->authService->check()){
             header('Location: /login');
         }
     }

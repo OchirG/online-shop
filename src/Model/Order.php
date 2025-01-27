@@ -11,10 +11,10 @@ class Order extends Model
     private array $products = [];
     private ?int $total = null;
 
-    public function createOrder(int $userId, string $name, string $email, string $address, string $number): int
+    public static function createOrder(int $userId, string $name, string $email, string $address, string $number): int
     {
 
-        $stmt = $this->pdo->prepare("
+        $stmt = self::getPdo()->prepare("
                 INSERT INTO orders (user_id, name, email, address, number) 
                 VALUES (:user_id, :name, :email, :address, :number)
             ");
@@ -25,12 +25,12 @@ class Order extends Model
             'address' => $address,
             'number' => $number
         ]);
-        return $this->pdo->lastInsertId();
+        return self::getPdo()->lastInsertId();
     }
 
-    public function getAllByUserId(int $userId): array|null
+    public static function getAllByUserId(int $userId): array|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM orders WHERE user_id = :user_id");
+        $stmt = self::getPdo()->prepare("SELECT * FROM orders WHERE user_id = :user_id");
         $stmt->execute(['user_id' => $userId]);
         $ordersData = $stmt->fetchAll();
 

@@ -11,9 +11,9 @@ class OrderProduct extends Model
 
 
 
-    public function createOrderDetail(int $orderId, int $productId, int $amount, float $total): bool
+    public static function createOrderDetail(int $orderId, int $productId, int $amount, float $total): bool
     {
-        $stmt = $this->pdo->prepare("INSERT INTO orders_products (order_id, product_id, amount, total) VALUES (:order_id, :product_id, :amount, :total)");
+        $stmt = self::getPdo()->prepare("INSERT INTO orders_products (order_id, product_id, amount, total) VALUES (:order_id, :product_id, :amount, :total)");
         $params = [
             'order_id' => $orderId,
             'product_id' => $productId,
@@ -23,9 +23,9 @@ class OrderProduct extends Model
         return $stmt->execute($params);
     }
 
-    public function getByOrderId(int $orderId): array|null
+    public static function getByOrderId(int $orderId): array|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM orders_products WHERE order_id = :order_id");
+        $stmt = self::getPdo()->prepare("SELECT * FROM orders_products WHERE order_id = :order_id");
         $stmt->execute(['order_id' => $orderId]);
 
         $orderProductsData = $stmt->fetchAll();

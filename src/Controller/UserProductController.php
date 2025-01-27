@@ -1,17 +1,20 @@
 <?php
 namespace Controller;
-use Model\UserProduct;
+
 use Request\AddProductRequest;
+use DataTransferObject\CartDTO;
+use Service\AuthService;
+use Service\CartService;
 
 class UserProductController
 {
-    private UserProduct $userProductModel;
-
+    private CartService $cartService;
+    private AuthService $authService;
 
     public function __construct()
     {
-        $this->userProductModel = new UserProduct();
-
+        $this->cartService = new CartService();
+        $this->authService = new AuthService();
     }
 
     public function getAddProductForm(): void
@@ -29,28 +32,31 @@ class UserProductController
             require_once './../view/catalog.php';
             return;
         }
+
         if (!isset($_SESSION['user_id'])) {
             header("Location: /login");
             exit();
         }
-        $userId = $_SESSION['user_id'];
+
+        $userId = $this->authService->getCurrentUser()->getId();
         $productId = $request->getProductId();
         $amount = $request->getAmount();
 
-        if ($this->userProductModel->getAddProduct($userId, $productId, $amount)) {
+        $addProductDTO = new CartDTO($userId, $productId, $amount);
+
+        if ($this->cartService->addProductToUserCart($addProductDTO)) {
             header('Location: /cart');
             exit();
         } else {
             $errors = 'Ошибка при добавлении продукта.';
+            require_once './../view/catalog.php';
         }
-
-        require_once './../view/catalog.php';
     }
 
     private function checkSession(): void
     {
         session_start();
-        if (!isset($_SESSION['user_id'])) {
+        if (!$this->authService->check()) {
             header('Location: /login');
         }
     }

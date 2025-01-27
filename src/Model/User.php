@@ -10,16 +10,16 @@ class User extends Model
 
 
       // Метод для вставки нового пользователя в таблицу users
-    public function create(string $name, string $email, string $hashPassword): bool
+    public static function create(string $name, string $email, string $hashPassword): bool
     {
-        $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
+        $stmt = self::getPdo()->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
         return $stmt->execute(['name' => $name, 'email' => $email, 'password' => $hashPassword]);
     }
 
     //  Метод для получения данных пользователя по его email
-    public function getOneByEmail(string $email): self|null
+    public static function getOneByEmail(string $email): self|null
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt = self::getPdo()->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->execute(['email' => $email]);
         $data = $stmt->fetch();
         if ($data === false) {
@@ -32,6 +32,26 @@ class User extends Model
         $obj->password = $data['password'];
         return $obj;
     }
+
+    //  Метод для получения данных пользователя по его идентификатору
+    public static function getOneById(int $userId): self|null
+    {
+        $stmt = self::getPdo()->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->execute(['id' => $userId]);
+        $data = $stmt->fetch();
+
+        if ($data !== false) {
+            $obj = new self();
+            $obj->id = $data['id'];
+            $obj->name = $data['name'];
+            $obj->email = $data['email'];
+            $obj->password = $data['password'];
+            return $obj;
+        }
+        return null;
+    }
+
+
 
     public function getEmail():string
     {
@@ -53,23 +73,8 @@ class User extends Model
         return $this->password;
     }
 
-    //  Метод для получения данных пользователя по его идентификатору
-    public function getOneById(int $userId): self|null
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
-        $stmt->execute(['id' => $userId]);
-        $data = $stmt->fetch();
 
-        if ($data !== false) {
-            $obj = new self();
-            $obj->id = $data['id'];
-            $obj->name = $data['name'];
-            $obj->email = $data['email'];
-            $obj->password = $data['password'];
-            return $obj;
-        }
-        return null;
-    }
+
 }
 
 

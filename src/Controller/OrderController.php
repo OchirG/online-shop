@@ -2,26 +2,29 @@
 namespace Controller;
 
 use DataTransferObject\CreateOrderDTO;
+use Model\Model;
 use Model\Order;
 use Model\OrderProduct;
 use Model\Product;
-use Model\UserProduct;
 use Request\OrderRequest;
+use Service\AuthService;
 use Service\OrderService;
 
 class OrderController {
     private  Product $product;
     private Order $order;
     private OrderProduct $orderProduct;
-    private UserProduct $userProduct;
+
     private OrderService $orderService;
+    private AuthService $authService;
+
 
     public function __construct() {
-        $this->userProduct = new UserProduct();
         $this->orderService = new OrderService();
         $this->orderProduct = new OrderProduct();
         $this->product = new Product();
         $this->order = new Order();
+        $this->authService = new AuthService();
     }
 
     public function getOrderForm() {
@@ -40,75 +43,81 @@ class OrderController {
             return;
         }
 
-        $userId = $_SESSION['user_id'];
+        $userId = $this->authService->getCurrentUser()->getId();
         $name = $request->getName();
         $email = $request->getEmail();
         $address = $request->getAddress();
         $number = $request->getNumber();
 
-        if ($userProducts = $this->userProduct->getAllByUserId($userId)) {
+        $dto = new CreateOrderDTO($name, $email, $address, $number);
 
-            $dto = new CreateOrderDTO($name, $email, $address, $number);
-            if ($this->orderService->create($dto, $userId)) {
-                header('Location: /order/confirm');
-                exit();
-            } else {
-                echo "Не удалось создать заказ. Пожалуйста, попробуйте позже.";
-            }
+        if ($this->orderService->create($dto, $userId)) {
+            header('Location: /order/confirm');
+            exit();
         } else {
-            header('Location: /cart');
-            exit;
+            echo "Не удалось создать заказ. Пожалуйста, попробуйте позже.";
         }
+
+        header('Location: /cart');
+        exit();
     }
 
     public function getOrders()
     {
-        $this->checkSession();
-        $userId = $_SESSION['user_id'];
-        $orders = $this->order->getAllByUserId($userId);
 
-        if (empty($orders)) {
-            echo 'У вас нет заказов.';
-            return;
-        }
+        $pdo = Model::getPdo();
+        $pdo->beginTransaction();
+        try {
+            $this->checkSession();
+            $userId = $this->authService->getCurrentUser()->getId();
+            $orders = $this->order->getAllByUserId($userId);
 
-        foreach ($orders as &$order) {
-            $orderProducts = $this->orderProduct->getByOrderId($order->getId());
-            $total = 0;
-
-            if (empty($orderProducts)) {
-                echo 'Не найдено ни одного товара для заказа с идентификатором: ' . $order->getId();
-                continue;
+            if (empty($orders)) {
+                echo 'У вас нет заказов.';
+                return;
             }
 
-            $productIds = [];
-            foreach ($orderProducts as $orderProduct) {
-                $productIds[] = $orderProduct->getProductId();
-            }
+            foreach ($orders as &$order) {
+                $orderProducts = $this->orderProduct->getByOrderId($order->getId());
+                $total = 0;
 
-            if (!empty($productIds)) {
-                $products = $this->product->getAllById($productIds);
-                foreach ($products as $product) {
-                    foreach ($orderProducts as $orderProduct) {
-                        if ($product->getId() === $orderProduct->getProductId()) {
-                            $product->setOrderAmount($orderProduct->getAmount());
-                            $product->setOrderPrice($orderProduct->getTotal());
-                            $total += $orderProduct->getTotal(); // Считаем общую стоимость заказа
+                if (empty($orderProducts)) {
+                    echo 'Не найдено ни одного товара для заказа с идентификатором: ' . $order->getId();
+                    continue;
+                }
+
+                $productIds = [];
+                foreach ($orderProducts as $orderProduct) {
+                    $productIds[] = $orderProduct->getProductId();
+                }
+
+                if (!empty($productIds)) {
+                    $products = $this->product->getAllById($productIds);
+                    foreach ($products as $product) {
+                        foreach ($orderProducts as $orderProduct) {
+                            if ($product->getId() === $orderProduct->getProductId()) {
+                                $product->setOrderAmount($orderProduct->getAmount());
+                                $product->setOrderPrice($orderProduct->getTotal());
+                                $total += $orderProduct->getTotal();
+                            }
                         }
                     }
+                    $order->setProducts($products);
                 }
-                $order->setProducts($products);
+
+                $order->setTotal($total);
             }
 
-            // Здесь можно передать $total в представление, например, через метод установки или настраиваемый метод в классе Order.
-            $order->setTotal($total); // Если у вас есть метод установки общей суммы заказов в классе Order
+            require_once './../view/orders.php';
+        }catch (\Exception $e) {
+            $pdo->rollBack();
+            echo 'Произошла ошибка' . $e->getMessage();
         }
-
-        require_once './../view/orders.php';
+        $pdo->commit();
     }
     private function checkSession(): void {
-        session_start();
-        if (!isset($_SESSION['user_id'])) {
+
+        if (!$this->authService->check()) {
             header('Location: /login');
             exit;
         }

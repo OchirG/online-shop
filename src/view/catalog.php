@@ -59,7 +59,7 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 20px; /* Расстояние между карточками */
+        gap: 20px;
         padding: 20px;
     }
 
@@ -73,7 +73,7 @@
     }
 
     .card img {
-        width: 100%; /* Ширина изображения занимает 100% карточки */
+        width: 100%;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
     }

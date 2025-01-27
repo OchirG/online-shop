@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Добавление продукта</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Путь к вашему CSS-файлу -->
+    <link rel="stylesheet" href="styles.css">
 
 </head>
 <body>
@@ -95,7 +95,7 @@
         border-radius: 5px;
         cursor: pointer;
         font-size: 16px;
-        width: 100%; /* Распределяем кнопку на всю ширину формы */
+        width: 100%;
     }
 
     button:hover {
@@ -109,7 +109,7 @@
 
     a {
         text-align: center;
-        margin-top: 15px; /* Добавляем отступ сверху */
-        display: block; /* Делаем ссылку блочным элементом для центрирования */
+        margin-top: 15px;
+        display: block;
     }
 </style>

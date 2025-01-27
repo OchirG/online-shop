@@ -22,7 +22,7 @@
                 <img src="<?= htmlspecialchars($product->getImage()) ?>" alt="<?= htmlspecialchars($product->getProductName()) ?>" style="width: 100px; height: auto;">
                 <?= htmlspecialchars($product->getProductName()) ?> - <?= $amount ?> шт. по <?= $price ?> рублей
 
-                <form method="POST" action="/cart" style="display:inline;">
+                <form method="POST" action="/remove_product" style="display:inline;">
                     <input type="hidden" name="product_id" value="<?= $product->getId() ?>">
                     <button type="submit">Удалить из корзины</button>
                 </form>
@@ -40,9 +40,8 @@
 </html>
 
 <style>
-    /* styles.css */
 
-    /* Основные стили для страницы корзины */
+
     body {
         background-image: url('<?php echo 'image/starwars1.jpg'; ?>');
         font-family: Arial, sans-serif;

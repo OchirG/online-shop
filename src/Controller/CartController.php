@@ -1,63 +1,29 @@
 <?php
 namespace Controller;
-use Model\User;
-use Model\Product;
 use Model\UserProduct;
+use Service\AuthService;
+use Service\CartService;
 class CartController
 {
     private UserProduct $userProductModel;
-    private User $userModel;
-    private Product $productModel;
+    private CartService $cartService;
+    private AuthService $authService;
+
 
     public function __construct()
     {
         $this->userProductModel = new UserProduct();
-        $this->userModel = new User();
-        $this->productModel = new Product();
+        $this->cartService = new CartService();
+        $this->authService = new AuthService();
+
     }
 
     public function getCartPage(): void
     {
         $this->checkSession();
 
-        $userId = $_SESSION['user_id'];
-
-        // Получаем данные о пользователе
-        $userData = $this->userModel->getOneById($userId);
-
-        // Получаем список товаров в корзине
-        $userProducts = $this->userProductModel->getAllByUserId($userId);
-
-
-        $products = [];
-
-        if (!empty($userProducts)) {
-            // Извлекаем идентификаторы продуктов
-            $productIds = [];
-            foreach ($userProducts as $userProduct) {
-                $productIds[] = $userProduct->getProductId();
-            }
-
-            // Получаем все продукты по идентификаторам
-            $productsDB = $this->productModel->getAllById($productIds);
-
-            $productMap = [];
-            foreach ($productsDB as $product) {
-                $productMap[$product->getId()] = $product;
-            }
-
-            // Добавляем количество товаров в массив
-            foreach ($userProducts as $userProduct) {
-                $productId = $userProduct->getProductId();
-                $amount = $userProduct->getAmount();
-
-
-                if (isset($productMap[$productId])) {
-                    $productMap[$productId]-> setAmount($amount);
-                    $products[] = $productMap[$productId];
-                }
-            }
-        }
+        $userId = $this->authService->getCurrentUser()->getId();
+        $products = $this->cartService->getUserCartProducts($userId);
 
         require_once './../view/cart.php';
     }
@@ -65,18 +31,21 @@ class CartController
     {
         $this->checkSession();
 
-        $userId = $_SESSION['user_id'];
+        $userId = $this->authService->getCurrentUser()->getId();
 
-        $this->userProductModel->clearCartByUserId($userId);
-
-            header('Location: /cart');
-            exit();
+        if (isset($_POST['product_id'])) {
+            $productId = intval($_POST['product_id']);
+            $this->userProductModel->removeProductFromCart($userId, $productId);
         }
+
+        header('Location: /cart');
+        exit();
+    }
 
     private function checkSession(): void
     {
         session_start();
-        if(!isset($_SESSION['user_id'])){
+        if(!$this->authService->check()){
             header('Location: /login');
         }
     }

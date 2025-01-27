@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оформление заказа</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Подключите CSS, если нужно -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div class="container">
     <h1>Оформление заказа</h1>
 
-    <form action="/order" method="POST"> <!-- Указываем маршрут для обработки формы -->
+    <form action="/order" method="POST">
         <div class="form-group">
             <label for="name">Имя:</label>
             <input type="text" id="name" name="name" required>
