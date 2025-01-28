@@ -1,16 +1,26 @@
 <?php
 namespace Core;
 
-use Request\Request;
-use Request\RegistrateRequest;
-use Request\LoginRequest;
 use Request\AddProductRequest;
+use Request\LoginRequest;
 use Request\OrderRequest;
-use Service\LoggerService;
-
+use Request\RegistrateRequest;
+use Request\Request;
+use Service\Auth\AuthSessionService;
+use Service\CartService;
+use Service\Logger\LoggerFileService;
+use Service\Logger\LoggerServiceInterface;
+use Service\OrderService;
+use Controller\UserController;
+use Model\User;
 
 class App {
     private array $routes = [];
+    private LoggerServiceInterface $logger;
+
+    public function __construct(LoggerServiceInterface $logger) {
+        $this->logger = $logger;
+    }
 
     public function run(): void {
         $uri = $_SERVER['REQUEST_URI'];
@@ -21,14 +31,23 @@ class App {
             $controllerClass = $route['class'];
             $controllerMethod = $route['method'];
 
-            $controller = new $controllerClass();
+            $orderService = new OrderService();
+            $cartService = new CartService();
+            $authService = new AuthSessionService();
+            $userModel = new User();
+
+            if ($controllerClass === UserController::class) {
+                $controller = new UserController($userModel, $authService);
+            } else {
+                $controller = new $controllerClass($orderService, $cartService, $authService);
+            }
             $request = $this->createRequestObject($uri, $method);
 
             try {
                 $controller->$controllerMethod($request);
 
             } catch (\Throwable $exception) {
-                LoggerService::log($exception);
+                $this->logger->error($exception);
 
                 http_response_code(500);
                 require_once './../view/500.php';

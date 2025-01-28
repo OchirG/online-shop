@@ -3,18 +3,18 @@ namespace Controller;
 
 use Request\AddProductRequest;
 use DataTransferObject\CartDTO;
-use Service\AuthService;
+use Service\Auth\AuthServiceInterface;
 use Service\CartService;
 
 class UserProductController
 {
     private CartService $cartService;
-    private AuthService $authService;
+    private AuthServiceInterface $authService;
 
-    public function __construct()
+    public function __construct(CartService $cartService, AuthServiceInterface $authService)
     {
-        $this->cartService = new CartService();
-        $this->authService = new AuthService();
+        $this->cartService = $cartService;
+        $this->authService = $authService;
     }
 
     public function getAddProductForm(): void

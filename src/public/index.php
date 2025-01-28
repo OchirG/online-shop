@@ -1,21 +1,23 @@
 <?php
 require_once './../Core/Autoload.php';
 require_once './../Core/App.php';
-use Core\Autoload;
-use Core\App;
+
+use Controller\CartController;
+use Controller\CatalogController;
+use Controller\OrderController;
 use Controller\UserController;
 use Controller\UserProductController;
-use Controller\CatalogController;
-use Controller\CartController;
-use Controller\OrderController;
+use Core\App;
+use Core\Autoload;
+use Service\Logger\LoggerFileService;
 
 
 $rootPath = str_replace('public', '', __DIR__);
 Autoload::autoload($rootPath);
 
+$loggerService = new LoggerFileService();
 
-
-$app = new App();
+$app = new App($loggerService);
 $app->addRoute('/registration', 'GET', UserController::class,  'getRegistrationForm');
 $app->addRoute('/registration', 'POST', UserController::class, 'handleRegistrationForm');
 $app->addRoute('/login', 'GET', UserController::class, 'getLoginForm');

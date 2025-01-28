@@ -48,7 +48,6 @@
         }
 
         .card-content {
-            display: none;
             padding: 10px;
         }
 
@@ -100,8 +99,10 @@
 <div class="catalog">
     <?php if (!empty($orders)): ?>
         <?php foreach ($orders as $order): ?>
-            <div class="card" onclick="toggleOrder(<?php echo $order->getId(); ?>)">
-                <h2>Заказ №<?php echo htmlspecialchars($order->getId()); ?></h2>
+            <details class="card">
+                <summary>
+                    <h2>Заказ №<?php echo htmlspecialchars($order->getId()); ?></h2>
+                </summary>
                 <div id="order-content-<?php echo $order->getId(); ?>" class="card-content">
                     <?php if (!empty($order->getProducts())): ?>
                         <?php foreach ($order->getProducts() as $product): ?>
@@ -121,23 +122,12 @@
                         <p>Нет доступных продуктов в данном заказе.</p>
                     <?php endif; ?>
                 </div>
-            </div>
+            </details>
         <?php endforeach; ?>
     <?php else: ?>
         <p>Нет доступных заказов.</p>
     <?php endif; ?>
 </div>
-
-<script>
-    function toggleOrder(orderId) {
-        const content = document.getElementById('order-content-' + orderId);
-        if (content.style.display === 'block') {
-            content.style.display = 'none';
-        } else {
-            content.style.display = 'block';
-        }
-    }
-</script>
 
 </body>
 </html>

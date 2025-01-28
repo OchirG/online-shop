@@ -20,3 +20,8 @@
 Строка: 130
 Время: 2025-01-27 17:14:28
 
+Ошибка: Call to undefined method Model\Product::getQuantity()
+Файл: /var/www/html/src/view/orders.php
+Строка: 112
+Время: 2025-01-27 18:07:46
+

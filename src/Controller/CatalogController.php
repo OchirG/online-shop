@@ -1,17 +1,18 @@
 <?php
 namespace Controller;
 use Model\Product;
-use Service\AuthService;
+use Service\Auth\AuthServiceInterface;
+
 
 class CatalogController
 {
     private Product $productModel;
-    private AuthService $authService;
+    private AuthServiceInterface $authService;
 
-    public function __construct()
+    public function __construct(Product $productModel, AuthServiceInterface $authService)
     {
-        $this->productModel = new Product();
-        $this->authService = new AuthService();
+        $this->productModel = $productModel;
+        $this->authService = $authService;
     }
 
     // метод отвечает за отображение страницы каталога с продуктами

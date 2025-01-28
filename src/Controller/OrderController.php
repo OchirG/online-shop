@@ -7,7 +7,7 @@ use Model\Order;
 use Model\OrderProduct;
 use Model\Product;
 use Request\OrderRequest;
-use Service\AuthService;
+use Service\Auth\AuthServiceInterface;
 use Service\OrderService;
 
 class OrderController {
@@ -16,15 +16,15 @@ class OrderController {
     private OrderProduct $orderProduct;
 
     private OrderService $orderService;
-    private AuthService $authService;
+    private AuthServiceInterface $authService;
 
 
-    public function __construct() {
-        $this->orderService = new OrderService();
-        $this->orderProduct = new OrderProduct();
-        $this->product = new Product();
-        $this->order = new Order();
-        $this->authService = new AuthService();
+    public function __construct(OrderService $orderService, AuthServiceInterface $authService, Product $product, Order $order, OrderProduct $orderProduct) {
+        $this->orderService = $orderService;
+        $this->orderProduct = $orderProduct;
+        $this->product = $product;
+        $this->order = $order;
+        $this->authService = $authService;
     }
 
     public function getOrderForm() {

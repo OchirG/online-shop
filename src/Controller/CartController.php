@@ -1,20 +1,20 @@
 <?php
 namespace Controller;
 use Model\UserProduct;
-use Service\AuthService;
+use Service\Auth\AuthServiceInterface;
 use Service\CartService;
 class CartController
 {
     private UserProduct $userProductModel;
     private CartService $cartService;
-    private AuthService $authService;
+    private AuthServiceInterface $authService;
 
 
-    public function __construct()
+    public function __construct(CartService $cartService, AuthServiceInterface $authService, UserProduct $userProductModel)
     {
-        $this->userProductModel = new UserProduct();
-        $this->cartService = new CartService();
-        $this->authService = new AuthService();
+        $this->userProductModel = $userProductModel;
+        $this->cartService = $cartService;
+        $this->authService = $authService;
 
     }
 
