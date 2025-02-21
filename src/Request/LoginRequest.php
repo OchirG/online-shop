@@ -37,3 +37,4 @@ class LoginRequest extends Request
         return $errors;
     }
 }
+

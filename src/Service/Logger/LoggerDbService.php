@@ -2,41 +2,33 @@
 
 namespace Service\Logger;
 
+use Model\Logger;
 use PDO;
 
 class LoggerDbService implements LoggerServiceInterface
 {
-    private PDO $pdo;
+    private Logger $logger;
 
-    public function __construct(PDO $pdo)
+
+    public function __construct(Logger $logger)
     {
-        $this->pdo = $pdo;
+        $this->logger = $logger;
+
     }
 
-    public function error(string $message, array $data = null): void
+    public function error(\Throwable $exception, array $data = null): void
     {
-        $this->log('ERROR', $message, $data);
+        $this->logger->log('ERROR', $exception);
     }
 
-    public function warning(string $message, array $data = null): void
+    public function warning(\Throwable $exception, array $data = null): void
     {
-        $this->log('WARNING', $message, $data);
+        $this->logger->log('WARNING', $exception);
     }
 
-    public function info(string $message, array $data = null): void
+    public function info(\Throwable $exception, array $data = null): void
     {
-        $this->log('INFO', $message, $data);
-    }
-
-    private function log(string $level, string $message, array $data = []): void
-    {
-        $timestamp = date('Y-m-d H:i:s');
-        $stmt = $this->pdo->prepare("INSERT INTO logs (level, message, created_at) VALUES (:level, :message, :created_at)");
-        $stmt->execute([
-            ':level' => $level,
-            ':message' => $message,
-            ':created_at' => $timestamp,
-        ]);
+        $this->logger->log('INFO', $exception);
     }
 }
 

@@ -59,32 +59,21 @@ class UserController
 
     public function handleLoginForm(LoginRequest $request): void
     {
-        $this->checkSession();
-
         $errors = $request->validate();
 
         if (empty($errors)) {
             $email = $request->getEmail();
             $password = $request->getPassword();
-            $loginResult = $this->authService->login($email, $password);
 
-            if ($loginResult['success']) {
+            if($this->authService->login($email, $password) === false) {
+                $errors['email'] = 'неверный пароль или логин';
+            } else {
                 header("Location: /catalog");
                 exit();
-            } else {
-                $errors['login'] = $loginResult['error'];
             }
         }
 
         require_once './../view/login.php';
-    }
-
-    private function checkSession(): void {
-
-        if (!$this->authService->check()) {
-            header('Location: /login');
-            exit;
-        }
     }
     public function logout(): void
     {

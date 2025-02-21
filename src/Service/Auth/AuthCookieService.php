@@ -29,14 +29,13 @@ class AuthCookieService implements AuthServiceInterface
         if ($user === null || !password_verify($password, $user->getPassword())) {
             return ['success' => false, 'error' => 'Логин или пароль указаны неверно.'];
         }
-        $_COOKIE['user_id'] = $user->getId();
+        setcookie('user_id', $user->getId(), time() + 86400, "/");
         return ['success' => true];
     }
 
-    private function sessionStart(): void{
-        if(session_status() !== PHP_SESSION_ACTIVE){
+    public function sessionStart(): void {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
         }
     }
-
 }

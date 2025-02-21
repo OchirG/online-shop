@@ -33,10 +33,6 @@ class UserProductController
             return;
         }
 
-        if (!isset($_SESSION['user_id'])) {
-            header("Location: /login");
-            exit();
-        }
 
         $userId = $this->authService->getCurrentUser()->getId();
         $productId = $request->getProductId();
@@ -62,3 +58,4 @@ class UserProductController
     }
 
 }
+

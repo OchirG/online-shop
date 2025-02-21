@@ -18,22 +18,19 @@ class CatalogController
     // метод отвечает за отображение страницы каталога с продуктами
     public function getCatalogPage(): void
     {
-        $this->checkSession();
+        if ($this->authService->check()) {
+            $products = $this->productModel->getAllProducts();
 
-        $products = $this->productModel->getAllProducts();
-
-        if (empty($products)) {
-            echo "Нет товаров в каталоге";
+            if (empty($products)) {
+                echo "Нет товаров в каталоге";
+            } else {
+                require_once './../view/catalog.php';
+            }
         } else {
-            require_once './../view/catalog.php';
+            header('Location: /login');
+            exit();
         }
     }
 
-    private function checkSession(): void
-    {
-        session_start();
-        if(!$this->authService->check()){
-            header('Location: /login');
-        }
-    }
+
 }

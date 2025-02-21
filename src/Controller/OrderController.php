@@ -62,9 +62,7 @@ class OrderController {
         exit();
     }
 
-    public function getOrders()
-    {
-
+    public function getOrders() {
         $pdo = Model::getPdo();
         $pdo->beginTransaction();
         try {
@@ -86,10 +84,10 @@ class OrderController {
                     continue;
                 }
 
-                $productIds = [];
-                foreach ($orderProducts as $orderProduct) {
-                    $productIds[] = $orderProduct->getProductId();
-                }
+                // Используем массив для уникальных id продуктов
+                $productIds = array_unique(array_map(function($orderProduct) {
+                    return $orderProduct->getProductId();
+                }, $orderProducts));
 
                 if (!empty($productIds)) {
                     $products = $this->product->getAllById($productIds);
@@ -103,15 +101,14 @@ class OrderController {
                         }
                     }
                     $order->setProducts($products);
+                    $order->setTotal($total);
                 }
-
-                $order->setTotal($total);
             }
 
             require_once './../view/orders.php';
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $pdo->rollBack();
-            echo 'Произошла ошибка' . $e->getMessage();
+            echo 'Произошла ошибка: ' . $e->getMessage();
         }
         $pdo->commit();
     }

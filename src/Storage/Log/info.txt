@@ -1,0 +1,133 @@
+Информация: #0 /var/www/html/src/Core/App.php(54): Controller\ProductController->getProductPage(Object(Request\Request))
+#1 /var/www/html/src/public/index.php(100): Core\App->run()
+#2 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 63
+Время: 2025-02-02 13:44:13
+
+Информация: #0 /var/www/html/src/Core/App.php(54): Controller\ProductController->getProductPage(Object(Request\Request))
+#1 /var/www/html/src/public/index.php(100): Core\App->run()
+#2 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 63
+Время: 2025-02-02 13:48:08
+
+Информация: #0 /var/www/html/src/Core/App.php(54): Controller\ProductController->getProductPage(Object(Request\Request))
+#1 /var/www/html/src/public/index.php(100): Core\App->run()
+#2 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 63
+Время: 2025-02-02 14:31:13
+
+Информация: #0 /var/www/html/src/Core/App.php(45): Controller\ProductController->getProductPage(Object(Request\Request))
+#1 /var/www/html/src/public/index.php(100): Core\App->run()
+#2 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 66
+Время: 2025-02-02 15:33:46
+
+Информация: #0 /var/www/html/src/Controller/ProductController.php(37): require_once()
+#1 /var/www/html/src/Core/App.php(45): Controller\ProductController->getProductPage(Object(Request\ProductRequest))
+#2 /var/www/html/src/public/index.php(100): Core\App->run()
+#3 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 66
+Время: 2025-02-02 15:37:29
+
+Информация: #0 /var/www/html/src/Controller/ProductController.php(37): require_once()
+#1 /var/www/html/src/Core/App.php(45): Controller\ProductController->getProductPage(Object(Request\ProductRequest))
+#2 /var/www/html/src/public/index.php(100): Core\App->run()
+#3 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 66
+Время: 2025-02-02 15:54:56
+
+Информация: #0 /var/www/html/src/Controller/ProductController.php(37): require_once()
+#1 /var/www/html/src/Core/App.php(45): Controller\ProductController->getProductPage(Object(Request\ProductRequest))
+#2 /var/www/html/src/public/index.php(100): Core\App->run()
+#3 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 66
+Время: 2025-02-02 15:54:58
+
+Информация: #0 /var/www/html/src/Controller/ProductController.php(37): require_once()
+#1 /var/www/html/src/Core/App.php(45): Controller\ProductController->getProductPage(Object(Request\ProductRequest))
+#2 /var/www/html/src/public/index.php(100): Core\App->run()
+#3 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 66
+Время: 2025-02-02 16:06:17
+
+Информация: #0 /var/www/html/src/Controller/ProductController.php(37): require_once()
+#1 /var/www/html/src/Core/App.php(45): Controller\ProductController->getProductPage(Object(Request\ProductRequest))
+#2 /var/www/html/src/public/index.php(100): Core\App->run()
+#3 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 66
+Время: 2025-02-02 16:06:18
+
+Информация: #0 /var/www/html/src/Controller/ProductController.php(37): require_once()
+#1 /var/www/html/src/Core/App.php(45): Controller\ProductController->getProductPage(Object(Request\ProductRequest))
+#2 /var/www/html/src/public/index.php(100): Core\App->run()
+#3 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 66
+Время: 2025-02-02 16:06:19
+
+Информация: #0 /var/www/html/src/view/product.php(51): Model\Review->getUserName()
+#1 /var/www/html/src/Controller/ProductController.php(37): require_once('/var/www/html/s...')
+#2 /var/www/html/src/Core/App.php(45): Controller\ProductController->getProductPage(Object(Request\ProductRequest))
+#3 /var/www/html/src/public/index.php(100): Core\App->run()
+#4 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 66
+Время: 2025-02-02 16:12:49
+
+Информация: #0 /var/www/html/src/view/product.php(51): Model\Review->getUserName()
+#1 /var/www/html/src/Controller/ProductController.php(37): require_once('/var/www/html/s...')
+#2 /var/www/html/src/Core/App.php(45): Controller\ProductController->getProductPage(Object(Request\ProductRequest))
+#3 /var/www/html/src/public/index.php(100): Core\App->run()
+#4 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 66
+Время: 2025-02-02 16:12:51
+
+Информация: #0 /var/www/html/src/public/index.php(100): Core\App->run()
+#1 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 66
+Время: 2025-02-09 03:56:27
+
+Информация: #0 /var/www/html/src/Controller/ProductController.php(62): Model\Review::create(63, 3, '\xD0\xB2\xD1\x81\xD0\xB5 \xD0\xBE\xD1\x82\xD0\xBB\xD0\xB8...', 4)
+#1 /var/www/html/src/Core/App.php(45): Controller\ProductController->handleReviewForm(Object(Request\ProductRequest))
+#2 /var/www/html/src/public/index.php(100): Core\App->run()
+#3 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 66
+Время: 2025-02-09 04:01:16
+
+Информация: #0 /var/www/html/src/Controller/ProductController.php(45): Request\ProductRequest->getUserId()
+#1 /var/www/html/src/Core/App.php(45): Controller\ProductController->handleReviewForm(Object(Request\ProductRequest))
+#2 /var/www/html/src/public/index.php(100): Core\App->run()
+#3 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 66
+Время: 2025-02-09 07:17:08
+
+Информация: #0 /var/www/html/src/Controller/ProductController.php(28): require_once()
+#1 /var/www/html/src/Core/App.php(43): Controller\ProductController->getProductPage(Object(Request\ProductRequest))
+#2 /var/www/html/src/public/index.php(101): Core\App->run()
+#3 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 64
+Время: 2025-02-13 09:25:42
+
+Информация: #0 /var/www/html/src/Service/ReviewService.php(49): Request\ProductRequest->getComment()
+#1 /var/www/html/src/Controller/ProductController.php(31): Service\ReviewService->addReview(Object(Request\ProductRequest))
+#2 /var/www/html/src/Core/App.php(43): Controller\ProductController->getProductPage(Object(Request\ProductRequest))
+#3 /var/www/html/src/public/index.php(101): Core\App->run()
+#4 {main}
+Файл: /var/www/html/src/Core/App.php
+Строка: 64
+Время: 2025-02-13 14:09:56
+

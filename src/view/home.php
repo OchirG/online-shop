@@ -6,10 +6,9 @@
     <title>Интернет-магазин Star Wars</title>
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            background-image: url('<?php echo 'image/dartoboi.jpg'; ?>');
+            background-image: url('image/dartoboi.jpg');
             margin: 0;
             font-family: 'Arial', sans-serif;
             background-color: rgba(0, 0, 0, 0.1);
@@ -35,22 +34,6 @@
         nav ul li a {
             color: rgb(255, 221, 0);
             text-decoration: none;
-        }
-
-        button.cart-button {
-            margin-left: 15px;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            background-color: gold;
-            color: black;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button.cart-button:hover {
-            background-color: #ffd700;
         }
 
         h1 {
@@ -128,13 +111,6 @@
             background-color: #222;
             color: white;
         }
-
-        .cart-message {
-            display: none;
-            color: green;
-            text-align: center;
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
@@ -142,16 +118,23 @@
     <h1>Star Wars: Магазин игрушек</h1>
     <nav>
         <ul>
-            <li><a href="/home">Главная</a></li>
+            <li><a href="/">Главная</a></li>
             <li><a href="/catalog">Каталог</a></li>
             <li><a href="/about">О нас</a></li>
             <li><a href="/contact">Контакты</a></li>
             <li><a href="/sale">Распродажа</a></li>
-            <li><button class="cart-button" onclick="window.location.href='/cart'">Моя корзина</button></li>
         </ul>
     </nav>
 </header>
 <main>
+    <section class="promotions">
+        <h2>Специальные предложения</h2>
+        <div class="promotion-card">
+            <h3>Ультра Скидки на Игрушки!</h3>
+            <p>Скидка 20% на все товары до конца месяца!</p>
+            <a href="/sale" class="button">Узнать больше</a>
+        </div>
+    </section>
     <div class="catalog">
         <?php if (!empty($products)): ?>
             <?php foreach ($products as $product): ?>
@@ -160,12 +143,11 @@
                     <h2><?php echo htmlspecialchars($product->getProductName()); ?></h2>
                     <h3><?php echo htmlspecialchars($product->getDescription()); ?></h3>
                     <p>Цена: <?php echo htmlspecialchars($product->getPrice()); ?> рублей.</p>
-                    <form class="add-to-cart-form">
+                    <form method="POST" action="/add-product">
                         <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
                         <input type="number" name="amount" value="1" min="1">
-                        <button type="button" class="add-to-cart">Купить</button>
+                        <button type="submit">Купить</button>
                     </form>
-                    <li><a href="/product/<?php echo $product->getId(); ?>">Подробнее</a></li>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
@@ -177,30 +159,5 @@
     <p>&copy; 2024 Star Wars Магазин. Все права защищены.</p>
     <p>Контакты: support@starwars.com</p>
 </footer>
-
-<script>
-    $(document).ready(function() {
-        $('.add-to-cart').click(function() {
-            var form = $(this).closest('.add-to-cart-form');
-            var productId = form.find('input[name="product_id"]').val();
-            var amount = form.find('input[name="amount"]').val();
-
-            $.ajax({
-                url: '/add-product',
-                type: 'POST',
-                data: {
-                    product_id: productId,
-                    amount: amount
-                },
-                success: function(response) {
-                    $('#cart-message').fadeIn().delay(2000).fadeOut();
-                },
-                error: function(xhr, status, error) {
-                    alert('Ошибка при добавлении товара в корзину. Попробуйте ещё раз.');
-                }
-            });
-        });
-    });
-</script>
 </body>
 </html>

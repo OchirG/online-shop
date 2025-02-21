@@ -46,7 +46,7 @@
         background-image: url('<?php echo 'image/starwars1.jpg'; ?>');
         font-family: Arial, sans-serif;
         background-color: rgba(248, 249, 250, 0.98);
-        color: #03060b;
+        color: #2c76f3;
         margin: 0;
         padding: 20px;
     }

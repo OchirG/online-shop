@@ -1,27 +1,27 @@
 
 
-Ошибка: Call to undefined method Request\OrderRequest::getddress()
-Файл: /var/www/html/src/Controller/OrderController.php
-Строка: 49
-Время: 2025-01-27 12:59:23
+Ошибка: Call to undefined method Controller\ProductController::handleAddReview()
+Файл: /var/www/html/src/Core/App.php
+Строка: 45
+Время: 2025-02-09 03:56:27
 
-Ошибка: DataTransferObject\CreateOrderDTO::__construct(): Argument #1 ($name) must be of type string, null given, called in /var/www/html/src/Controller/OrderController.php on line 53
-Файл: /var/www/html/src/DataTransferObject/CreateOrderDTO.php
-Строка: 7
-Время: 2025-01-27 13:00:17
+Ошибка: Model\Review::create(): Argument #3 ($rating) must be of type int, string given, called in /var/www/html/src/Controller/ProductController.php on line 62
+Файл: /var/www/html/src/Model/Review.php
+Строка: 12
+Время: 2025-02-09 04:01:16
 
-Ошибка: Typed static property Model\Model::$pdo must not be accessed before initialization
-Файл: /var/www/html/src/Model/Model.php
-Строка: 13
-Время: 2025-01-27 14:31:38
+Ошибка: Request\ProductRequest::getUserId(): Return value must be of type int, null returned
+Файл: /var/www/html/src/Request/ProductRequest.php
+Строка: 9
+Время: 2025-02-09 07:17:08
 
-Ошибка: syntax error, unexpected token "endforeach", expecting "elseif" or "else" or "endif"
-Файл: /var/www/html/src/view/orders.php
-Строка: 130
-Время: 2025-01-27 17:14:28
+Ошибка: Call to a member function getUserName() on array
+Файл: /var/www/html/src/view/product.php
+Строка: 51
+Время: 2025-02-13 09:25:42
 
-Ошибка: Call to undefined method Model\Product::getQuantity()
-Файл: /var/www/html/src/view/orders.php
-Строка: 112
-Время: 2025-01-27 18:07:46
+Ошибка: Request\ProductRequest::getComment(): Return value must be of type string, null returned
+Файл: /var/www/html/src/Request/ProductRequest.php
+Строка: 18
+Время: 2025-02-13 14:09:56
 

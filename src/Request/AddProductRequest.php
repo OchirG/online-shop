@@ -49,3 +49,4 @@ class AddProductRequest extends Request
         return $errors;
     }
 }
+
